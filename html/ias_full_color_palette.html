@@ -1,0 +1,483 @@
+
+<h2 class="sr-only">IAS full color palette with base colors, tints, shades, opacity variants, and functional aliases</h2>
+
+<style>
+  .pal-root { font-family: 'Space Mono', monospace; padding: 1.5rem 0; }
+  .pal-section-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    padding: 0 0 0.5rem;
+    border-bottom: 0.5px solid var(--border);
+    margin-bottom: 1rem;
+    margin-top: 1.75rem;
+  }
+  .pal-section-label:first-child { margin-top: 0; }
+  .pal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .pal-card {
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .pal-chip { height: 64px; }
+  .pal-body { padding: 8px 10px; }
+  .pal-name { font-size: 11px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; }
+  .pal-hex { font-size: 10px; color: var(--text-muted); }
+  .pal-role { font-size: 9px; color: var(--text-secondary); margin-top: 3px; line-height: 1.35; }
+  .pal-tag {
+    display: inline-block;
+    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+    background: var(--surface-1);
+    color: var(--text-muted);
+    border: 0.5px solid var(--border);
+    letter-spacing: 0.04em;
+  }
+
+  .alias-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  .alias-table th {
+    text-align: left;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    padding: 6px 10px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .alias-table td {
+    padding: 6px 10px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: middle;
+    color: var(--text-primary);
+  }
+  .alias-table tr:last-child td { border-bottom: none; }
+  .alias-table .mono { font-family: 'Space Mono', monospace; color: var(--text-secondary); font-size: 10px; }
+  .dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 0.5px solid var(--border);
+  }
+
+  .dist-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 0.75rem;
+  }
+  .dist-label {
+    display: flex;
+    gap: 0;
+    font-size: 9px;
+    margin-top: 4px;
+  }
+  .dist-seg-lbl { flex: 1; text-align: center; color: var(--text-muted); letter-spacing: 0.04em; }
+
+  .combo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+  }
+  .combo-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .combo-preview {
+    padding: 14px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.01em;
+  }
+  .combo-meta {
+    padding: 6px 10px;
+    font-size: 9px;
+    color: var(--text-muted);
+    background: var(--surface-1);
+    border-top: 0.5px solid var(--border);
+    line-height: 1.4;
+  }
+</style>
+
+<div class="pal-root">
+
+  <p class="pal-section-label">01 — Base Colors (Core 5)</p>
+  <div class="pal-grid">
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#0A2E36;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Deep Slate Teal</div>
+        <div class="pal-hex">#0A2E36</div>
+        <div class="pal-role">Primary — headers, nav, dark surfaces</div>
+        <span class="pal-tag">30% of layout</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#3F7266;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Muted Seafoam</div>
+        <div class="pal-hex">#3F7266</div>
+        <div class="pal-role">Secondary — icons, dividers, accent on dark</div>
+        <span class="pal-tag">supporting</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#00E5A3;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Kinetic Emerald</div>
+        <div class="pal-hex">#00E5A3</div>
+        <div class="pal-role">Accent — CTAs, links, active states only</div>
+        <span class="pal-tag">10% of layout</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#111827;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Ink Blue-Gray</div>
+        <div class="pal-hex">#111827</div>
+        <div class="pal-role">Dark neutral — all body type, borders</div>
+        <span class="pal-tag">text default</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#F9FAFB; border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Pure Ash</div>
+        <div class="pal-hex">#F9FAFB</div>
+        <div class="pal-role">Light neutral — page canvas, card fills</div>
+        <span class="pal-tag">60% of layout</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="pal-section-label">02 — Primary Tints & Shades (Deep Slate Teal #0A2E36)</p>
+  <div class="pal-grid">
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#E8F0F1;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Primary-50</div>
+        <div class="pal-hex">#E8F0F1</div>
+        <div class="pal-role">Subtle tint — hover backgrounds, row fills</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#C1D5D9;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Primary-100</div>
+        <div class="pal-hex">#C1D5D9</div>
+        <div class="pal-role">Light tint — disabled state fills</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#4B7A8A;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Primary-400</div>
+        <div class="pal-hex">#4B7A8A</div>
+        <div class="pal-role">Mid tone — reversed text on dark, sub-labels</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#062028;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Primary-800</div>
+        <div class="pal-hex">#062028</div>
+        <div class="pal-role">Deep shade — pressed states, overlays</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#030F12;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Primary-950</div>
+        <div class="pal-hex">#030F12</div>
+        <div class="pal-role">Near-black — maximum depth, modal overlays</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="pal-section-label">03 — Secondary Tints & Shades (Muted Seafoam #3F7266)</p>
+  <div class="pal-grid">
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#E6F0EE;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Secondary-50</div>
+        <div class="pal-hex">#E6F0EE</div>
+        <div class="pal-role">Tint — pill backgrounds, success fills</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#9BBEC0;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Secondary-200</div>
+        <div class="pal-hex">#9BBEC0</div>
+        <div class="pal-role">Muted secondary — reversed wordmark accent</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#5C8A8C;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Secondary-400</div>
+        <div class="pal-hex">#5C8A8C</div>
+        <div class="pal-role">Muted label — reversed mono text on dark surfaces</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#2A5047;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Secondary-700</div>
+        <div class="pal-hex">#2A5047</div>
+        <div class="pal-role">Deep shade — hover on secondary elements</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#1A3330;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Secondary-900</div>
+        <div class="pal-hex">#1A3330</div>
+        <div class="pal-role">Near-primary shade — deep secondary fills</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="pal-section-label">04 — Accent Tints & Shades (Kinetic Emerald #00E5A3)</p>
+  <div class="pal-grid">
+    <div class="pal-card">
+      <div class="pal-chip" style="background:rgba(0,229,163,0.04); border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Accent-04</div>
+        <div class="pal-hex">rgba(0,229,163,0.04)</div>
+        <div class="pal-role">Subtle selection — card selected state fill</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:rgba(0,229,163,0.05); border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Accent-05</div>
+        <div class="pal-hex">rgba(0,229,163,0.05)</div>
+        <div class="pal-role">Drag highlight — dropzone hover background</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#00B882;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Accent-600</div>
+        <div class="pal-hex">#00B882</div>
+        <div class="pal-role">Pressed CTA — active/hover state on accent button</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:rgba(0,229,163,0.15); border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Accent-15</div>
+        <div class="pal-hex">rgba(0,229,163,0.15)</div>
+        <div class="pal-role">Border accent — progress indicator glow ring</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:rgba(0,229,163,0.30); border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Accent-30</div>
+        <div class="pal-hex">rgba(0,229,163,0.30)</div>
+        <div class="pal-role">Stroke accent — icon border on dark surface</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="pal-section-label">05 — Neutral Tints & Shades</p>
+  <div class="pal-grid">
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#FFFFFF; border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">White</div>
+        <div class="pal-hex">#FFFFFF</div>
+        <div class="pal-role">Canvas — primary page and card background</div>
+        <span class="pal-tag">60% default</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#F9FAFB; border-bottom: 0.5px solid #E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Pure Ash</div>
+        <div class="pal-hex">#F9FAFB</div>
+        <div class="pal-role">Alt canvas — section fills, code blocks</div>
+        <span class="pal-tag">60% alt</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#E5E7EB;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Border Gray</div>
+        <div class="pal-hex">#E5E7EB</div>
+        <div class="pal-role">Borders — form inputs, card separators</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#9CA3AF;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Disabled Gray</div>
+        <div class="pal-hex">#9CA3AF</div>
+        <div class="pal-role">Disabled text — inactive buttons, placeholders</div>
+        <span class="pal-tag">found in codebase</span>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#6B7280;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Muted Gray</div>
+        <div class="pal-hex">#6B7280</div>
+        <div class="pal-role">Secondary text — captions, metadata labels</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#374151;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Body Gray</div>
+        <div class="pal-hex">#374151</div>
+        <div class="pal-role">Body text — paragraphs, descriptions</div>
+      </div>
+    </div>
+    <div class="pal-card">
+      <div class="pal-chip" style="background:#111827;"></div>
+      <div class="pal-body">
+        <div class="pal-name">Ink Blue-Gray</div>
+        <div class="pal-hex">#111827</div>
+        <div class="pal-role">Dark neutral — headings, borders, base text</div>
+        <span class="pal-tag">canonical</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="pal-section-label">06 — CSS Variable Aliases (Functional Tokens)</p>
+  <table class="alias-table">
+    <thead>
+      <tr>
+        <th>Swatch</th>
+        <th>CSS Variable</th>
+        <th>Resolved Value</th>
+        <th>Where Used</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dot" style="background:#0A2E36;"></span></td>
+        <td class="mono">--primary / --ias-primary</td>
+        <td class="mono">#0A2E36</td>
+        <td>Headers, nav, dark sections, CTA bg</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#3F7266;"></span></td>
+        <td class="mono">--secondary / --ias-secondary</td>
+        <td class="mono">#3F7266</td>
+        <td>Icons, dividers, secondary labels</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#00E5A3;"></span></td>
+        <td class="mono">--accent / --ias-accent</td>
+        <td class="mono">#00E5A3</td>
+        <td>CTAs, links, active indicators, step markers</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#111827;"></span></td>
+        <td class="mono">--dark / --ias-dark</td>
+        <td class="mono">#111827</td>
+        <td>All body type, strong borders</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#F9FAFB;border:0.5px solid #E5E7EB;"></span></td>
+        <td class="mono">--light / --ias-light</td>
+        <td class="mono">#F9FAFB</td>
+        <td>Page canvas, section fills, code blocks</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#FFFFFF;border:0.5px solid #E5E7EB;"></span></td>
+        <td class="mono">--white / --ias-white</td>
+        <td class="mono">#FFFFFF</td>
+        <td>Card fills, reversed type on dark</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#6B7280;"></span></td>
+        <td class="mono">--muted / --ias-muted</td>
+        <td class="mono">#6B7280</td>
+        <td>Captions, eyebrows, metadata</td>
+      </tr>
+      <tr>
+        <td><span class="dot" style="background:#E5E7EB;"></span></td>
+        <td class="mono">--mid / --ias-mid</td>
+        <td class="mono">#E5E7EB</td>
+        <td>Hairline borders, dividers, input strokes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="pal-section-label">07 — 60/30/10 Distribution Rule</p>
+  <div class="dist-bar">
+    <div style="flex:60;background:#F9FAFB;border:0.5px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:9px;color:#6B7280;letter-spacing:0.04em;font-family:'Space Mono',monospace;">60% canvas</div>
+    <div style="flex:30;background:#0A2E36;display:flex;align-items:center;justify-content:center;font-size:9px;color:#00E5A3;letter-spacing:0.04em;font-family:'Space Mono',monospace;">30% brand</div>
+    <div style="flex:10;background:#00E5A3;display:flex;align-items:center;justify-content:center;font-size:9px;color:#0A2E36;letter-spacing:0.04em;font-family:'Space Mono',monospace;">10%</div>
+  </div>
+  <p style="font-size:10px;color:var(--text-muted);margin-top:6px;font-family:'Space Mono',monospace;">Layouts default to white or #F9FAFB. Color is a splash — not a flood.</p>
+
+  <p class="pal-section-label">08 — Approved Combinations</p>
+  <div class="combo-grid">
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#0A2E36;color:#FFFFFF;">White on Primary</div>
+      <div class="combo-meta">Headers, nav, footers</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#0A2E36;color:#00E5A3;">Emerald on Primary</div>
+      <div class="combo-meta">CTAs on dark surfaces</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#FFFFFF;color:#0A2E36;border-bottom:0.5px solid #E5E7EB;">Primary on White</div>
+      <div class="combo-meta">Body, letterhead, cards</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#00E5A3;color:#0A2E36;">Primary on Emerald</div>
+      <div class="combo-meta">CTA buttons, badges</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#3F7266;color:#FFFFFF;">White on Seafoam</div>
+      <div class="combo-meta">Icon fills, state indicators</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#E6F0EE;color:#3F7266;">Seafoam on Tint</div>
+      <div class="combo-meta">Pills, tags, secondary badges</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#F9FAFB;color:#111827;border-bottom:0.5px solid #E5E7EB;">Ink on Ash</div>
+      <div class="combo-meta">Code blocks, section fills</div>
+    </div>
+    <div class="combo-card">
+      <div class="combo-preview" style="background:#0A2E36;color:#9BBEC0;">Reversed Secondary</div>
+      <div class="combo-meta">Wordmark accent on dark</div>
+    </div>
+  </div>
+
+</div>

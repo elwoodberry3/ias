@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Call — I Automate Shit</title>
+<meta name="description" content="Tell me who you are and why you're here, then grab time on the calendar. Three doors, one conversation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ════════════════════════════════════════════════════════════════
+     BOOK A CALL — qualifying + scheduling page
+     Three entry points (executive / recruiter / consulting business)
+     converge here. Step 1 segments them, Step 2 asks bucket-specific
+     questions, Step 3 collects contact info, Step 4 is the scheduling
+     embed. Everything compiles into one payload object — see the
+     buildPayload() function near the bottom of the script, and the
+     TODO near the top of it for wiring this to a real n8n webhook.
+     ════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary:   #0A2E36;
+    --secondary: #3F7266;
+    --accent:    #00E5A3;
+    --dark:      #111827;
+    --muted:     #6B7280;
+    --light:     #F9FAFB;
+    --white:     #FFFFFF;
+    --border:    #E5E7EB;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'Space Mono', monospace; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── NAV (inherited) ──────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-icon {
+    width: 34px; height: 34px; background: var(--primary); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .nav-icon svg { display: block; }
+  .nav-wordmark { font-size: 15px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -0.01em; }
+  .nav-wordmark span { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent); color: var(--primary);
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+    padding: 9px 20px; border-radius: 6px; text-decoration: none; border: none; cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── BREADCRUMB ───────────────────────────────────────────── */
+  .breadcrumb {
+    max-width: 720px; margin: 0 auto; padding: 22px 2rem 0;
+    font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .breadcrumb a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb .sep { color: var(--border); }
+  .breadcrumb .current { color: var(--primary); }
+
+  /* ── PAGE HERO ────────────────────────────────────────────── */
+  .page-hero { max-width: 720px; margin: 0 auto; padding: 16px 2rem 36px; text-align: center; }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--secondary); margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 24px; height: 2px; background: var(--accent); }
+  .page-headline {
+    font-size: clamp(30px, 4.5vw, 42px); font-weight: 700; color: var(--primary);
+    line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 14px;
+  }
+  .page-sub { font-size: 15px; color: var(--muted); max-width: 540px; margin: 0 auto; line-height: 1.65; }
+
+  .accent-strip { display: flex; height: 5px; max-width: 720px; margin: 0 auto; }
+  .accent-strip .seg-primary { flex: 1; background: var(--primary); }
+  .accent-strip .seg-secondary { width: 80px; background: var(--secondary); }
+  .accent-strip .seg-accent { width: 40px; background: var(--accent); }
+
+  /* ── FORM SHELL ───────────────────────────────────────────── */
+  .form-shell { max-width: 720px; margin: 0 auto; padding: 40px 2rem 80px; }
+
+  /* ── STEPPER ──────────────────────────────────────────────── */
+  .stepper-bar { display: flex; align-items: center; margin-bottom: 40px; }
+  .stepper-segment { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; position: relative; }
+  .stepper-track { width: 100%; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .stepper-track-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.3s ease; }
+  .stepper-segment.complete .stepper-track-fill { width: 100%; }
+  .stepper-segment.active .stepper-track-fill { width: 50%; }
+  .stepper-label {
+    font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--border); transition: color 0.2s;
+  }
+  .stepper-segment.active .stepper-label,
+  .stepper-segment.complete .stepper-label { color: var(--secondary); }
+  .stepper-segment.active .stepper-label { color: var(--primary); font-weight: 700; }
+
+  /* ── FORM STEP PANELS ─────────────────────────────────────── */
+  .form-step { display: none; }
+  .form-step.active { display: block; animation: stepIn 0.35s ease; }
+  @keyframes stepIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .step-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 6px; letter-spacing: -0.01em; }
+  .step-desc { font-size: 13px; color: var(--muted); margin-bottom: 26px; line-height: 1.55; }
+
+  /* ── BUCKET CARDS (Step 1) ───────────────────────────────── */
+  .bucket-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
+  .bucket-radio { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+  .bucket-card {
+    display: block; cursor: pointer;
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 22px 18px; text-align: center;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+  .bucket-radio:focus-visible + .bucket-card { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .bucket-card:hover { border-color: var(--secondary); }
+  .bucket-radio:checked + .bucket-card {
+    border-color: var(--accent);
+    background: rgba(0,229,163,0.05);
+    box-shadow: 0 4px 18px rgba(0,229,163,0.12);
+  }
+  .bucket-icon {
+    width: 44px; height: 44px; border-radius: 10px; background: var(--primary);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 14px;
+  }
+  .bucket-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .bucket-desc { font-size: 12px; color: var(--muted); line-height: 1.45; }
+
+  /* ── FIELD ELEMENTS ───────────────────────────────────────── */
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .field-group { margin-bottom: 16px; }
+  .field-group:last-child { margin-bottom: 0; }
+  .field-label {
+    display: block; font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 7px;
+  }
+  .field-label .optional {
+    font-family: 'Space Mono', monospace; font-weight: 400; font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.04em; margin-left: 4px;
+  }
+  .field-input, .field-select, .field-textarea {
+    width: 100%; font-family: 'Space Grotesk', sans-serif; font-size: 14px; color: var(--dark);
+    background: var(--white); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 11px 14px; transition: border-color 0.15s;
+  }
+  .field-input:focus, .field-select:focus, .field-textarea:focus { border-color: var(--accent); outline: none; }
+  .field-textarea { resize: vertical; min-height: 80px; }
+  .field-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B7280' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  .bucket-fields { display: none; }
+  .bucket-fields.active { display: block; }
+
+  /* ── STEP NAV BUTTONS ─────────────────────────────────────── */
+  .step-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+  .btn-primary {
+    background: var(--primary); color: var(--white);
+    font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+    padding: 13px 26px; border-radius: 8px; border: none; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(10,46,54,0.18); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-primary .arrow { color: var(--accent); font-size: 16px; line-height: 1; }
+  .btn-ghost {
+    background: none; border: none; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; color: var(--muted);
+    display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s; padding: 8px 4px;
+  }
+  .btn-ghost:hover { color: var(--primary); }
+
+  /* ── SCHEDULING STEP ──────────────────────────────────────── */
+  .schedule-frame {
+    border: 1.5px dashed var(--border); border-radius: 12px;
+    padding: 28px 20px; text-align: center; background: var(--light);
+  }
+  .schedule-frame .placeholder-label {
+    font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--secondary); margin-bottom: 8px;
+  }
+  .schedule-frame .placeholder-sub { font-size: 12px; color: var(--muted); margin-bottom: 22px; }
+
+  .mock-calendar { max-width: 320px; margin: 0 auto 22px; }
+  .mock-cal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: 'Space Mono', monospace; font-size: 11px; color: var(--primary); font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .mock-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+  .mock-cal-cell {
+    aspect-ratio: 1; border-radius: 6px; background: var(--white); border: 1px solid var(--border);
+    font-size: 10px; color: var(--muted); display: flex; align-items: center; justify-content: center;
+  }
+  .mock-cal-cell.open { border-color: rgba(0,229,163,0.4); color: var(--primary); font-weight: 700; cursor: pointer; }
+  .mock-cal-cell.open:hover { background: rgba(0,229,163,0.08); border-color: var(--accent); }
+  .mock-cal-cell.selected { background: var(--accent); border-color: var(--accent); color: var(--primary); }
+  .mock-cal-cell.muted { opacity: 0.3; }
+
+  .selected-slot {
+    font-family: 'Space Mono', monospace; font-size: 12px; color: var(--primary);
+    background: rgba(0,229,163,0.1); border: 1px solid rgba(0,229,163,0.35);
+    border-radius: 6px; padding: 8px 14px; display: inline-block; margin-bottom: 4px;
+  }
+
+  /* ── CONFIRMATION ─────────────────────────────────────────── */
+  .confirm-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: rgba(0,229,163,0.12);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+  }
+  .confirm-title { font-size: 22px; font-weight: 700; color: var(--primary); text-align: center; margin-bottom: 8px; }
+  .confirm-sub { font-size: 14px; color: var(--muted); text-align: center; max-width: 440px; margin: 0 auto 32px; line-height: 1.6; }
+
+  .payload-card {
+    background: var(--primary); border-radius: 10px; padding: 20px 22px; margin-bottom: 24px;
+  }
+  .payload-label {
+    font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
+  }
+  .payload-pre {
+    font-family: 'Space Mono', monospace; font-size: 11.5px; line-height: 1.7;
+    color: rgba(255,255,255,0.85); white-space: pre-wrap; word-break: break-word;
+  }
+  .payload-pre .pk { color: var(--accent); }
+  .payload-footnote { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; }
+
+  .confirm-actions { display: flex; justify-content: center; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+
+  /* ── FOOTER (inherited) ───────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 2rem; max-width: 860px; margin: 60px auto 0;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-left { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); }
+  .footer-left strong { color: var(--primary); font-weight: 700; }
+  .footer-left span { color: var(--accent); }
+  .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 680px) {
+    nav { padding: 0 1.25rem; }
+    .breadcrumb { padding: 18px 1.25rem 0; }
+    .page-hero { padding: 14px 1.25rem 28px; }
+    .form-shell { padding: 32px 1.25rem 60px; }
+    .bucket-grid { grid-template-columns: 1fr; }
+    .field-row { grid-template-columns: 1fr; gap: 0; }
+    .stepper-label { display: none; }
+    .confirm-actions { flex-direction: column; width: 100%; }
+    .confirm-actions .btn-primary, .confirm-actions .btn-ghost { width: 100%; justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="ias_home.html" class="nav-logo">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="14" height="11" rx="2" stroke="#00E5A3" stroke-width="1.5" fill="none"/>
+        <rect x="6.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+        <rect x="10.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+        <rect x="6.5" y="12" width="7" height="1.5" rx="0.5" fill="#3F7266"/>
+        <line x1="10" y1="3" x2="10" y2="5" stroke="#00E5A3" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">I Automate <span>Shit</span></div>
+  </a>
+  <a href="demos.html" class="nav-cta">See the Builds</a>
+</nav>
+
+<div class="breadcrumb">
+  <a href="ias_home.html">Home</a>
+  <span class="sep">/</span>
+  <span class="current">Book a Call</span>
+</div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="hero-eyebrow">30 minutes · no pitch deck</p>
+  <h1 class="page-headline">Let's get the right conversation started.</h1>
+  <p class="page-sub">An executive, a recruiter, and a business owner walk into this page for completely different reasons. Tell me which one is you, and I'll skip straight to what actually matters to you.</p>
+</section>
+
+<div class="accent-strip">
+  <div class="seg-primary"></div>
+  <div class="seg-secondary"></div>
+  <div class="seg-accent"></div>
+</div>
+
+<div class="form-shell">
+
+  <!-- STEPPER -->
+  <div class="stepper-bar" id="stepper-bar">
+    <div class="stepper-segment active" data-step="1">
+      <span class="stepper-label">1 · You</span>
+      <div class="stepper-track"><div class="stepper-track-fill"></div></div>
+    </div>
+    <div class="stepper-segment" data-step="2">
+      <span class="stepper-label">2 · Details</span>
+      <div class="stepper-track"><div class="stepper-track-fill"></div></div>
+    </div>
+    <div class="stepper-segment" data-step="3">
+      <span class="stepper-label">3 · Contact</span>
+      <div class="stepper-track"><div class="stepper-track-fill"></div></div>
+    </div>
+    <div class="stepper-segment" data-step="4">
+      <span class="stepper-label">4 · Schedule</span>
+      <div class="stepper-track"><div class="stepper-track-fill"></div></div>
+    </div>
+  </div>
+
+  <form id="book-call-form" novalidate>
+
+    <!-- ═══ STEP 1 — WHO ARE YOU ═══ -->
+    <div class="form-step active" id="step-1" data-step="1">
+      <h2 class="step-title">What brings you here?</h2>
+      <p class="step-desc">This decides which questions you see next — nobody fills out the same form twice.</p>
+
+      <div class="bucket-grid">
+
+        <input type="radio" name="bucket" id="bucket-executive" value="executive" class="bucket-radio">
+        <label for="bucket-executive" class="bucket-card">
+          <div class="bucket-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <rect x="3" y="6" width="14" height="10" rx="1.5" stroke="#00E5A3" stroke-width="1.5"/>
+              <path d="M7 6V4.5a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 13 4.5V6" stroke="#00E5A3" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="bucket-title">Executive / Hiring Manager</div>
+          <div class="bucket-desc">Evaluating me for a role on your team</div>
+        </label>
+
+        <input type="radio" name="bucket" id="bucket-recruiter" value="recruiter" class="bucket-radio">
+        <label for="bucket-recruiter" class="bucket-card">
+          <div class="bucket-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="8" cy="8" r="3.5" stroke="#00E5A3" stroke-width="1.5"/>
+              <path d="M3 16c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="#00E5A3" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="15" cy="6" r="1.5" stroke="#3F7266" stroke-width="1.3"/>
+              <path d="M13.5 9.5c1.7.3 3 1.7 3 3.5" stroke="#3F7266" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="bucket-title">Recruiter</div>
+          <div class="bucket-desc">Sourcing for an open req or building a pipeline</div>
+        </label>
+
+        <input type="radio" name="bucket" id="bucket-consulting" value="consulting" class="bucket-radio">
+        <label for="bucket-consulting" class="bucket-card">
+          <div class="bucket-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="3" stroke="#00E5A3" stroke-width="1.5"/>
+              <path d="M10 3v2.2M10 14.8V17M17 10h-2.2M5.2 10H3M15 5l-1.5 1.5M6.5 13.5L5 15M15 15l-1.5-1.5M6.5 6.5L5 5" stroke="#00E5A3" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="bucket-title">Business Needing Automation</div>
+          <div class="bucket-desc">Your team is losing hours to manual work</div>
+        </label>
+
+      </div>
+
+      <div class="step-actions" style="justify-content: flex-end;">
+        <button type="button" class="btn-primary" id="step1-continue" disabled onclick="goToStep(2)">
+          Continue <span class="arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 2 — BUCKET-SPECIFIC DETAILS ═══ -->
+    <div class="form-step" id="step-2" data-step="2">
+      <h2 class="step-title">A few specifics.</h2>
+      <p class="step-desc">This is what I read before I ever say hello — no warm-up small talk required on the call.</p>
+
+      <!-- Executive / Hiring Manager fields -->
+      <fieldset class="bucket-fields" id="fields-executive" data-bucket="executive" style="border:none;">
+        <div class="field-group">
+          <label class="field-label" for="exec-company">Company</label>
+          <input class="field-input" type="text" id="exec-company" name="exec_company">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="exec-role">Role you're evaluating for</label>
+          <input class="field-input" type="text" id="exec-role" name="exec_role" placeholder="e.g. Applied AI Engineer">
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="exec-stage">Where are we in the process?</label>
+            <select class="field-select" id="exec-stage" name="exec_stage">
+              <option value="">Select one</option>
+              <option>Just researching</option>
+              <option>Initial conversation</option>
+              <option>Technical screen</option>
+              <option>Panel round</option>
+              <option>Final round</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="exec-priority">What matters most right now?</label>
+            <select class="field-select" id="exec-priority" name="exec_priority">
+              <option value="">Select one</option>
+              <option>Technical depth</option>
+              <option>Real build examples</option>
+              <option>Culture fit</option>
+              <option>Comp alignment</option>
+              <option>All of the above</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Recruiter fields -->
+      <fieldset class="bucket-fields" id="fields-recruiter" data-bucket="recruiter" style="border:none;">
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="rec-agency">Agency / firm <span class="optional">optional</span></label>
+            <input class="field-input" type="text" id="rec-agency" name="rec_agency">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="rec-client">Client company <span class="optional">if applicable</span></label>
+            <input class="field-input" type="text" id="rec-client" name="rec_client">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="rec-role">Role title</label>
+          <input class="field-input" type="text" id="rec-role" name="rec_role" placeholder="e.g. Automation Engineer">
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="rec-comp">Comp range <span class="optional">optional</span></label>
+            <input class="field-input" type="text" id="rec-comp" name="rec_comp" placeholder="e.g. $130k–$160k">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="rec-req">Is this a specific req?</label>
+            <select class="field-select" id="rec-req" name="rec_req">
+              <option value="">Select one</option>
+              <option>Specific open req</option>
+              <option>Building a pipeline</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="rec-location">Location / remote requirement <span class="optional">optional</span></label>
+          <input class="field-input" type="text" id="rec-location" name="rec_location">
+        </div>
+      </fieldset>
+
+      <!-- Consulting / Business fields -->
+      <fieldset class="bucket-fields" id="fields-consulting" data-bucket="consulting" style="border:none;">
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="biz-company">Company</label>
+            <input class="field-input" type="text" id="biz-company" name="biz_company">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="biz-industry">Industry</label>
+            <select class="field-select" id="biz-industry" name="biz_industry">
+              <option value="">Select one</option>
+              <option>Legal &amp; Compliance Services</option>
+              <option>Banking, Finance, FinTech &amp; Insurance</option>
+              <option>Healthcare Operations &amp; Medical Billing</option>
+              <option>Supply Chain, Logistics &amp; Construction</option>
+              <option>Mid-Market SaaS &amp; Tech</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz-process">Biggest manual process right now</label>
+          <textarea class="field-textarea" id="biz-process" name="biz_process" placeholder="What's eating your team's time?"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label" for="biz-team">Team size</label>
+            <select class="field-select" id="biz-team" name="biz_team">
+              <option value="">Select one</option>
+              <option>1–10</option>
+              <option>11–50</option>
+              <option>51–200</option>
+              <option>200+</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="biz-budget">Budget range</label>
+            <select class="field-select" id="biz-budget" name="biz_budget">
+              <option value="">Select one</option>
+              <option>Not sure yet</option>
+              <option>Under $5k</option>
+              <option>$5k–$15k</option>
+              <option>$15k+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="biz-timeline">Timeline</label>
+          <select class="field-select" id="biz-timeline" name="biz_timeline">
+            <option value="">Select one</option>
+            <option>ASAP</option>
+            <option>This quarter</option>
+            <option>Just exploring</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <div class="step-actions">
+        <button type="button" class="btn-ghost" onclick="goToStep(1)">← Back</button>
+        <button type="button" class="btn-primary" onclick="goToStep(3)">Continue <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 3 — CONTACT INFO ═══ -->
+    <div class="form-step" id="step-3" data-step="3">
+      <h2 class="step-title">Where should this land?</h2>
+      <p class="step-desc">Just enough to confirm the call and follow up if a time doesn't work.</p>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="contact-name">Full name</label>
+          <input class="field-input" type="text" id="contact-name" name="contact_name" required>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="contact-email">Email</label>
+          <input class="field-input" type="email" id="contact-email" name="contact_email" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="contact-phone">Phone <span class="optional">optional</span></label>
+          <input class="field-input" type="tel" id="contact-phone" name="contact_phone">
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="contact-linkedin">LinkedIn <span class="optional">optional</span></label>
+          <input class="field-input" type="text" id="contact-linkedin" name="contact_linkedin" placeholder="linkedin.com/in/...">
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="contact-notes">Anything else I should know? <span class="optional">optional</span></label>
+        <textarea class="field-textarea" id="contact-notes" name="contact_notes"></textarea>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="btn-ghost" onclick="goToStep(2)">← Back</button>
+        <button type="button" class="btn-primary" onclick="handleContactContinue()">Continue to scheduling <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- ═══ STEP 4 — SCHEDULING ═══ -->
+    <div class="form-step" id="step-4" data-step="4">
+      <h2 class="step-title">Pick a time.</h2>
+      <p class="step-desc">This is the only step where I need real-time access to a calendar.</p>
+
+      <!-- TODO: This is a placeholder. Replace the .schedule-frame contents
+           with a real scheduling embed — either:
+
+           Calendly inline widget:
+           <div class="calendly-inline-widget" data-url="https://calendly.com/YOUR-HANDLE/30min" style="min-width:320px;height:630px;"></div>
+           <script src="https://assets.calendly.com/assets/external/widget.js"></script>
+
+           ...or a Google Calendar appointment scheduling page embedded via <iframe src="...">.
+           Either way, keep this as the LAST step — everything above this point
+           is the qualifying payload; this step only adds the requested time. -->
+      <div class="schedule-frame">
+        <div class="placeholder-label">// Scheduling embed</div>
+        <div class="placeholder-sub">Calendly/Google Calendar goes here — demo grid below</div>
+
+        <div class="mock-calendar">
+          <div class="mock-cal-head">
+            <span>June 2026</span>
+            <span class="mono" style="color:var(--muted); font-weight:400;">Mon–Fri, 30 min</span>
+          </div>
+          <div class="mock-cal-grid" id="mock-cal-grid"></div>
+        </div>
+
+        <div id="slot-confirm-area">
+          <p class="mono" style="font-size:11px; color:var(--muted);">Select an open slot above</p>
+        </div>
+      </div>
+
+      <div class="step-actions">
+        <button type="button" class="btn-ghost" onclick="goToStep(3)">← Back</button>
+        <button type="button" class="btn-primary" id="step4-confirm" disabled onclick="submitBooking()">Confirm &amp; book <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- ═══ CONFIRMATION ═══ -->
+    <div class="form-step" id="step-confirm" data-step="confirm">
+      <div class="confirm-icon">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+          <path d="M5 13.5L10.5 19L21 8" stroke="#00E5A3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="confirm-title">You're on the calendar.</h2>
+      <p class="confirm-sub">A confirmation is heading to your inbox. Here's exactly what I'll have in front of me before we talk — same payload, no filtering.</p>
+
+      <div class="payload-card">
+        <div class="payload-label">// Routed payload</div>
+        <pre class="payload-pre" id="payload-output"></pre>
+      </div>
+      <p class="payload-footnote">This is what actually lands in my system — the same n8n routing that sorts every build behind this site sorts leads too. No CRM black box.</p>
+
+      <div class="confirm-actions">
+        <a href="ias_home.html" class="btn-primary">Back to home <span class="arrow">→</span></a>
+        <a href="demos.html" class="btn-ghost">Browse the builds</a>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>I Automate <span>Shit</span></strong> · Automation Engineering · Aubrey / Frisco, TX
+  </div>
+  <div class="footer-dot"></div>
+</footer>
+
+<script>
+  // ── STATE ────────────────────────────────────────────────────
+  let currentStep = 1;
+  let selectedBucket = null;
+  let selectedSlot = null;
+
+  // ── BUCKET SELECTION (Step 1) ──────────────────────────────
+  document.querySelectorAll('input[name="bucket"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      selectedBucket = radio.value;
+      document.getElementById('step1-continue').disabled = false;
+    });
+  });
+
+  // ── STEP NAVIGATION ─────────────────────────────────────────
+  function goToStep(step) {
+    if (step === 2) {
+      document.querySelectorAll('.bucket-fields').forEach(f => f.classList.remove('active'));
+      const target = document.getElementById('fields-' + selectedBucket);
+      if (target) target.classList.add('active');
+    }
+
+    document.querySelectorAll('.form-step').forEach(p => p.classList.remove('active'));
+    document.getElementById('step-' + step).classList.add('active');
+
+    document.querySelectorAll('.stepper-segment').forEach(seg => {
+      const segStep = parseInt(seg.dataset.step, 10);
+      seg.classList.remove('active', 'complete');
+      if (segStep < step) seg.classList.add('complete');
+      if (segStep === step) seg.classList.add('active');
+    });
+
+    currentStep = step;
+    window.scrollTo({ top: document.querySelector('.form-shell').offsetTop - 80, behavior: 'smooth' });
+  }
+
+  function validateStep(stepEl) {
+    const requiredFields = stepEl.querySelectorAll('[required]');
+    for (const field of requiredFields) {
+      if (field.offsetParent !== null && !field.checkValidity()) {
+        field.reportValidity();
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function handleContactContinue() {
+    if (!validateStep(document.getElementById('step-3'))) return;
+    buildMockCalendar();
+    goToStep(4);
+  }
+
+  // ── MOCK SCHEDULING CALENDAR (Step 4 placeholder) ──────────
+  function buildMockCalendar() {
+    const grid = document.getElementById('mock-cal-grid');
+    grid.innerHTML = '';
+    const dayLabels = ['S','M','T','W','T','F','S'];
+    dayLabels.forEach(d => {
+      const cell = document.createElement('div');
+      cell.className = 'mock-cal-cell muted';
+      cell.style.background = 'transparent';
+      cell.style.border = 'none';
+      cell.textContent = d;
+      grid.appendChild(cell);
+    });
+    // 28-cell illustrative month grid; every 3rd weekday cell is "open"
+    for (let i = 1; i <= 28; i++) {
+      const cell = document.createElement('div');
+      const weekday = i % 7;
+      const isWeekday = weekday !== 1 && weekday !== 0; // skip approx weekends
+      const isOpen = isWeekday && i % 3 === 0;
+      cell.textContent = i;
+      if (isOpen) {
+        cell.className = 'mock-cal-cell open';
+        cell.addEventListener('click', () => selectSlot(cell, i));
+      } else {
+        cell.className = 'mock-cal-cell muted';
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  function selectSlot(cell, day) {
+    document.querySelectorAll('.mock-cal-cell.selected').forEach(c => c.classList.remove('selected'));
+    cell.classList.add('selected');
+    selectedSlot = `June ${day}, 2026 · 10:00 AM CT`;
+    document.getElementById('slot-confirm-area').innerHTML =
+      `<span class="selected-slot">${selectedSlot}</span>`;
+    document.getElementById('step4-confirm').disabled = false;
+  }
+
+  // ── PAYLOAD CONSTRUCTION ─────────────────────────────────────
+  // TODO: replace the console.log below with a real POST to your
+  // n8n webhook, e.g.:
+  //
+  //   fetch('https://YOUR-N8N-INSTANCE/webhook/book-a-call', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(payload)
+  //   });
+  //
+  // n8n then branches on payload.lead_bucket to route into the
+  // right HubSpot pipeline / Slack channel / email template.
+  function buildPayload() {
+    const form = document.getElementById('book-call-form');
+    const data = new FormData(form);
+
+    const details = {};
+    if (selectedBucket === 'executive') {
+      details.company = data.get('exec_company') || null;
+      details.role = data.get('exec_role') || null;
+      details.process_stage = data.get('exec_stage') || null;
+      details.priority = data.get('exec_priority') || null;
+    } else if (selectedBucket === 'recruiter') {
+      details.agency = data.get('rec_agency') || null;
+      details.client_company = data.get('rec_client') || null;
+      details.role = data.get('rec_role') || null;
+      details.comp_range = data.get('rec_comp') || null;
+      details.req_type = data.get('rec_req') || null;
+      details.location = data.get('rec_location') || null;
+    } else if (selectedBucket === 'consulting') {
+      details.company = data.get('biz_company') || null;
+      details.industry = data.get('biz_industry') || null;
+      details.manual_process = data.get('biz_process') || null;
+      details.team_size = data.get('biz_team') || null;
+      details.budget_range = data.get('biz_budget') || null;
+      details.timeline = data.get('biz_timeline') || null;
+    }
+
+    return {
+      submitted_at: new Date().toISOString(),
+      source: 'book-a-call',
+      lead_bucket: selectedBucket,
+      details: details,
+      contact: {
+        name: data.get('contact_name') || null,
+        email: data.get('contact_email') || null,
+        phone: data.get('contact_phone') || null,
+        linkedin: data.get('contact_linkedin') || null,
+        notes: data.get('contact_notes') || null
+      },
+      requested_call_window: selectedSlot
+    };
+  }
+
+  function renderPayload(payload) {
+    const json = JSON.stringify(payload, null, 2);
+    // Lightweight key highlighting — wraps "key": in an accent span
+    const highlighted = json.replace(/"([a-zA-Z_]+)":/g, '<span class="pk">"$1"</span>:');
+    document.getElementById('payload-output').innerHTML = highlighted;
+  }
+
+  function submitBooking() {
+    const payload = buildPayload();
+    console.log('Book a Call payload:', payload); // TODO: replace with real webhook POST
+    renderPayload(payload);
+    goToStep('confirm');
+  }
+</script>
+
+</body>
+</html>

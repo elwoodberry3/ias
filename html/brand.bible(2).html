@@ -1,0 +1,745 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ias-primary: #0A2E36;
+    --ias-secondary: #3F7266;
+    --ias-accent: #00E5A3;
+    --ias-dark: #111827;
+    --ias-light: #F9FAFB;
+    --ias-white: #FFFFFF;
+    --ias-mid: #E5E7EB;
+    --ias-muted: #6B7280;
+    --f-display: 'Space Grotesk', sans-serif;
+    --f-mono: 'Space Mono', monospace;
+  }
+
+  body { font-family: var(--f-display); background: var(--ias-light); color: var(--ias-dark); }
+
+  .page { max-width: 680px; margin: 0 auto; }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--ias-white);
+    border: 0.5px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+  .cover-header {
+    background: var(--ias-primary);
+    padding: 2.5rem 2rem 2rem;
+  }
+  .cover-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ias-accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .cover-wordmark {
+    font-family: var(--f-display);
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--ias-white);
+    line-height: 1.1;
+    margin-bottom: 0.4rem;
+  }
+  .cover-wordmark span { color: var(--ias-accent); }
+  .cover-tagline {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: #9CA3AF;
+    margin-bottom: 2rem;
+  }
+  .cover-strip {
+    display: flex;
+    height: 8px;
+  }
+  .cover-strip div:nth-child(1) { flex: 6; background: var(--ias-primary); }
+  .cover-strip div:nth-child(2) { flex: 3; background: var(--ias-secondary); }
+  .cover-strip div:nth-child(3) { flex: 1; background: var(--ias-accent); }
+  .cover-meta {
+    padding: 1.25rem 2rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 12px;
+    color: var(--ias-muted);
+    font-family: var(--f-mono);
+    border-top: 0.5px solid var(--ias-mid);
+  }
+  .cover-meta strong { color: var(--ias-dark); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 2px; }
+
+  /* ── SECTION ── */
+  .section {
+    background: var(--ias-white);
+    border: 0.5px solid #E5E7EB;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--ias-mid);
+  }
+  .section-num {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ias-accent);
+    background: var(--ias-primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ias-muted);
+  }
+  .section-body { padding: 1.5rem; }
+
+  /* ── PALETTE ── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .swatch { border-radius: 8px; overflow: hidden; border: 0.5px solid rgba(0,0,0,0.08); }
+  .swatch-chip { height: 72px; }
+  .swatch-info { padding: 8px; background: var(--ias-white); }
+  .swatch-name { font-size: 11px; font-weight: 500; color: var(--ias-dark); margin-bottom: 2px; }
+  .swatch-hex { font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); }
+  .swatch-role { font-size: 10px; color: var(--ias-muted); margin-top: 3px; line-height: 1.3; }
+
+  .rule-60-30-10 {
+    display: flex;
+    height: 14px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  .rule-bar { display: flex; align-items: center; justify-content: center; font-family: var(--f-mono); font-size: 10px; font-weight: 700; }
+
+  /* ── TYPOGRAPHY ── */
+  .type-sample {
+    padding: 1.25rem;
+    border: 0.5px solid var(--ias-mid);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .type-label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ias-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    border-bottom: 0.5px solid var(--ias-mid);
+    padding-bottom: 0.4rem;
+  }
+  .type-spec {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ias-muted);
+    margin-top: 6px;
+  }
+
+  /* ── LOGO MARKS ── */
+  .logo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .logo-cell {
+    border-radius: 8px;
+    border: 0.5px solid var(--ias-mid);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-light { background: var(--ias-white); }
+  .logo-dark { background: var(--ias-primary); }
+  .logo-primary-bg { background: var(--ias-primary); }
+  .logo-accent-bg { background: var(--ias-accent); }
+  .logo-cell-label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ias-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .logo-dark .logo-cell-label { color: #4B7A8A; }
+
+  .wordmark {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+  }
+  .wordmark .line1 { letter-spacing: -0.01em; }
+  .wordmark .line2 { letter-spacing: 0.04em; font-size: 14px; font-weight: 400; }
+
+  /* ── LAYOUT PRINCIPLES ── */
+  .layout-demos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .layout-demo {
+    border: 0.5px solid var(--ias-mid);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .layout-demo-label {
+    background: var(--ias-light);
+    padding: 6px 10px;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    color: var(--ias-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 0.5px solid var(--ias-mid);
+  }
+  .layout-demo-canvas { padding: 12px; background: var(--ias-white); }
+
+  /* ── CARD USAGE ── */
+  .usage-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 0.5px solid var(--ias-mid);
+  }
+  .usage-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .usage-badge {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-do { background: #D1FAE5; color: #065F46; }
+  .badge-dont { background: #FEE2E2; color: #991B1B; }
+  .badge-when { background: #E0E7FF; color: #3730A3; }
+  .usage-text { font-size: 13px; color: var(--ias-dark); line-height: 1.5; }
+  .usage-text em { font-family: var(--f-mono); font-style: normal; font-size: 11px; color: var(--ias-muted); }
+
+  /* ── VOICE ── */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .voice-card { padding: 1rem; border-radius: 8px; border: 0.5px solid var(--ias-mid); }
+  .voice-card-label { font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.6rem; }
+  .voice-card.yes .voice-card-label { color: #059669; }
+  .voice-card.no .voice-card-label { color: #DC2626; }
+  .voice-card p { font-size: 13px; color: var(--ias-dark); line-height: 1.5; }
+
+  /* ── SURFACE DEMOS ── */
+  .surface-demos { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .sd { border-radius: 8px; overflow: hidden; border: 0.5px solid var(--ias-mid); }
+  .sd-label { font-family: var(--f-mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 8px; color: var(--ias-muted); background: var(--ias-light); border-bottom: 0.5px solid var(--ias-mid); }
+  .sd-body { padding: 12px; }
+
+  /* tiny letterhead mockup */
+  .lh { background: var(--ias-white); padding: 10px; }
+  .lh-header { background: var(--ias-primary); padding: 6px 8px; border-radius: 4px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .lh-logo { font-family: var(--f-display); font-size: 10px; font-weight: 700; color: var(--ias-white); }
+  .lh-logo span { color: var(--ias-accent); }
+  .lh-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ias-accent); }
+  .lh-line { height: 4px; border-radius: 2px; margin: 3px 0; }
+  .lh-line.dark { background: #E5E7EB; }
+  .lh-line.short { width: 55%; }
+  .lh-accent-bar { height: 3px; background: var(--ias-accent); border-radius: 2px; margin-top: 8px; width: 30%; }
+
+  /* tiny biz card */
+  .bc-wrap { background: #E5E7EB; padding: 8px; border-radius: 4px; display: flex; justify-content: center; }
+  .bc { background: var(--ias-white); border-radius: 4px; padding: 10px 12px; width: 100%; position: relative; overflow: hidden; }
+  .bc-accent { position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--ias-accent); }
+  .bc-name { font-family: var(--f-display); font-size: 10px; font-weight: 700; color: var(--ias-primary); margin-left: 8px; }
+  .bc-title { font-family: var(--f-mono); font-size: 8px; color: var(--ias-muted); margin-left: 8px; margin-top: 2px; }
+  .bc-url { font-family: var(--f-mono); font-size: 8px; color: var(--ias-accent); margin-left: 8px; margin-top: 6px; }
+
+  /* tiny landing hero */
+  .hero-mini { background: var(--ias-white); padding: 10px; }
+  .hero-mini-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 0.5px solid var(--ias-mid); }
+  .hero-mini-logo { font-family: var(--f-display); font-size: 9px; font-weight: 700; color: var(--ias-primary); }
+  .hero-mini-logo span { color: var(--ias-accent); }
+  .hero-mini-cta-sm { background: var(--ias-accent); border-radius: 3px; padding: 2px 7px; font-size: 8px; font-weight: 700; color: var(--ias-primary); font-family: var(--f-display); }
+  .hero-h { font-family: var(--f-display); font-size: 13px; font-weight: 700; color: var(--ias-primary); line-height: 1.2; margin-bottom: 5px; }
+  .hero-h span { color: var(--ias-secondary); }
+  .hero-sub { font-family: var(--f-mono); font-size: 8px; color: var(--ias-muted); line-height: 1.4; margin-bottom: 8px; }
+  .hero-btn { display: inline-block; background: var(--ias-primary); color: var(--ias-white); font-family: var(--f-display); font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; }
+  .hero-btn span { color: var(--ias-accent); margin-left: 3px; }
+
+  hr.divider { border: none; border-top: 0.5px solid var(--ias-mid); margin: 1.5rem 0; }
+
+  .pill {
+    display: inline-block;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin: 3px;
+  }
+  .pill-primary { background: var(--ias-primary); color: var(--ias-accent); }
+  .pill-secondary { background: #E6F0EE; color: var(--ias-secondary); }
+  .pill-accent { background: var(--ias-accent); color: var(--ias-primary); }
+  .pill-outline { background: transparent; color: var(--ias-muted); border: 0.5px solid var(--ias-mid); }
+
+  .footer-strip {
+    background: var(--ias-primary);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .footer-wm { font-family: var(--f-display); font-weight: 700; font-size: 16px; color: var(--ias-white); }
+  .footer-wm span { color: var(--ias-accent); }
+  .footer-note { font-family: var(--f-mono); font-size: 10px; color: #4B7A8A; }
+</style>
+
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-header">
+      <p class="cover-eyebrow">Brand Identity System — v1.0</p>
+      <div class="cover-wordmark">I Automate <span>Shit</span></div>
+      <p class="cover-tagline">// Personal brand of an automation engineer. Dallas, TX.</p>
+    </div>
+    <div class="cover-strip"><div></div><div></div><div></div></div>
+    <div class="cover-meta">
+      <div><strong>Palette</strong>5 colors</div>
+      <div><strong>Primary Font</strong>Space Grotesk</div>
+      <div><strong>Utility Font</strong>Space Mono</div>
+      <div><strong>Version</strong>June 2026</div>
+    </div>
+  </div>
+
+  <!-- 01 PALETTE -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">01</span>
+      <span class="section-title">Color System</span>
+    </div>
+    <div class="section-body">
+
+      <div class="palette-grid">
+        <div class="swatch">
+          <div class="swatch-chip" style="background:#0A2E36;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Deep Slate Teal</div>
+            <div class="swatch-hex">#0A2E36</div>
+            <div class="swatch-role">Primary — headers, nav, dark surfaces</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip" style="background:#3F7266;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Muted Seafoam</div>
+            <div class="swatch-hex">#3F7266</div>
+            <div class="swatch-role">Secondary — icons, states, accents on dark</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip" style="background:#00E5A3;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Kinetic Emerald</div>
+            <div class="swatch-hex">#00E5A3</div>
+            <div class="swatch-role">Accent — CTAs, links, active states only</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip" style="background:#111827;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Ink Blue-Gray</div>
+            <div class="swatch-hex">#111827</div>
+            <div class="swatch-role">Dark neutral — all body type, borders</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-chip" style="background:#F9FAFB; border: 0.5px solid #E5E7EB;"></div>
+          <div class="swatch-info">
+            <div class="swatch-name">Pure Ash</div>
+            <div class="swatch-hex">#F9FAFB</div>
+            <div class="swatch-role">Light neutral — page canvas, card fills</div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size: 12px; color: var(--ias-muted); font-family: var(--f-mono); margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em;">60 – 30 – 10 distribution rule</p>
+      <div class="rule-60-30-10">
+        <div class="rule-bar" style="flex: 60; background: var(--ias-light); color: var(--ias-muted); border: 0.5px solid var(--ias-mid);">60% canvas</div>
+        <div class="rule-bar" style="flex: 30; background: var(--ias-primary); color: var(--ias-accent);">30% brand</div>
+        <div class="rule-bar" style="flex: 10; background: var(--ias-accent); color: var(--ias-primary);">10%</div>
+      </div>
+      <p style="font-size: 11px; color: var(--ias-muted); font-family: var(--f-mono); margin-top: 0.5rem;">Layouts default to white or #F9FAFB. Color is a splash — not a flood.</p>
+
+      <hr class="divider">
+
+      <p style="font-size: 12px; font-weight: 500; margin-bottom: 0.75rem;">Approved combinations</p>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+        <div style="border-radius: 6px; overflow: hidden; border: 0.5px solid var(--ias-mid);">
+          <div style="background: var(--ias-primary); padding: 12px 10px; font-family: var(--f-display); font-size: 12px; font-weight: 700; color: var(--ias-white);">White on Primary</div>
+          <div style="padding: 6px 10px; font-family: var(--f-mono); font-size: 9px; color: var(--ias-muted);">Headers, nav, footers</div>
+        </div>
+        <div style="border-radius: 6px; overflow: hidden; border: 0.5px solid var(--ias-mid);">
+          <div style="background: var(--ias-primary); padding: 12px 10px; font-family: var(--f-display); font-size: 12px; font-weight: 700; color: var(--ias-accent);">Emerald on Primary</div>
+          <div style="padding: 6px 10px; font-family: var(--f-mono); font-size: 9px; color: var(--ias-muted);">CTAs on dark surfaces</div>
+        </div>
+        <div style="border-radius: 6px; overflow: hidden; border: 0.5px solid var(--ias-mid);">
+          <div style="background: var(--ias-white); padding: 12px 10px; font-family: var(--f-display); font-size: 12px; font-weight: 700; color: var(--ias-primary);">Primary on White</div>
+          <div style="padding: 6px 10px; font-family: var(--f-mono); font-size: 9px; color: var(--ias-muted);">Body, letterhead, cards</div>
+        </div>
+        <div style="border-radius: 6px; overflow: hidden; border: 0.5px solid var(--ias-mid);">
+          <div style="background: var(--ias-accent); padding: 12px 10px; font-family: var(--f-display); font-size: 12px; font-weight: 700; color: var(--ias-primary);">Primary on Emerald</div>
+          <div style="padding: 6px 10px; font-family: var(--f-mono); font-size: 9px; color: var(--ias-muted);">CTA buttons, badges</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 02 TYPOGRAPHY -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">02</span>
+      <span class="section-title">Typography</span>
+    </div>
+    <div class="section-body">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem;">
+        <div style="padding: 1rem; border: 0.5px solid var(--ias-mid); border-radius: 8px;">
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Display / UI — Space Grotesk</p>
+          <p style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--ias-primary); line-height: 1.1;">Automate Everything.</p>
+          <p style="font-family: 'Space Grotesk', sans-serif; font-size: 13px; color: var(--ias-muted); margin-top: 6px;">ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>abcdefghijklmnopqrstuvwxyz 0–9</p>
+        </div>
+        <div style="padding: 1rem; border: 0.5px solid var(--ias-mid); border-radius: 8px;">
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;">Utility / Code — Space Mono</p>
+          <p style="font-family: 'Space Mono', monospace; font-size: 14px; font-weight: 400; color: var(--ias-secondary); line-height: 1.4;">// n8n · Zapier · Make.com<br>workflow.trigger('cron')</p>
+          <p style="font-family: 'Space Mono', monospace; font-size: 11px; color: var(--ias-muted); margin-top: 6px;">Eyebrows · labels · code · captions</p>
+        </div>
+      </div>
+
+      <div class="type-sample">
+        <div class="type-label">Display / Hero headline</div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700; color: var(--ias-primary); line-height: 1.05; letter-spacing: -0.02em;">I Automate Shit.</p>
+        <p class="type-spec">Space Grotesk · 700 · 32px · -0.02em tracking · #0A2E36</p>
+      </div>
+
+      <div class="type-sample">
+        <div class="type-label">Section heading</div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 500; color: var(--ias-primary); line-height: 1.2;">Automation Engineering · Dallas, TX</p>
+        <p class="type-spec">Space Grotesk · 500 · 20px · #0A2E36</p>
+      </div>
+
+      <div class="type-sample">
+        <div class="type-label">Body copy</div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 400; color: var(--ias-dark); line-height: 1.6;">I build n8n workflows that eliminate repetitive tasks, cut operational waste, and save companies hundreds of hours a year. If your team is doing by hand what a machine could do in seconds — that's the problem I solve.</p>
+        <p class="type-spec">Space Grotesk · 400 · 14px · 1.6 leading · #111827</p>
+      </div>
+
+      <div class="type-sample">
+        <div class="type-label">Eyebrow / label / code</div>
+        <p style="font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 400; color: var(--ias-muted); letter-spacing: 0.12em; text-transform: uppercase;">// Automation Engineer · n8n Specialist · Frisco, TX</p>
+        <p class="type-spec">Space Mono · 400 · 11px · 0.12em tracking · uppercase · #6B7280</p>
+      </div>
+
+      <div class="type-sample" style="margin-bottom: 0;">
+        <div class="type-label">CTA button text</div>
+        <div style="display: inline-block; background: var(--ias-accent); color: var(--ias-primary); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 6px; letter-spacing: 0.01em;">Schedule a Call →</div>
+        &nbsp;&nbsp;
+        <div style="display: inline-block; background: var(--ias-primary); color: var(--ias-white); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 6px; letter-spacing: 0.01em;">View My Work →</div>
+        <p class="type-spec" style="margin-top: 8px;">Space Grotesk · 700 · 13px · Emerald/Primary or Primary/White</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 03 LOGO & WORDMARK -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">03</span>
+      <span class="section-title">Logo & Wordmark</span>
+    </div>
+    <div class="section-body">
+      <div class="logo-grid">
+        <div class="logo-cell logo-light">
+          <div class="wordmark" style="color: var(--ias-primary);">
+            <span class="line1">I AUTOMATE</span>
+            <span class="line2" style="color: var(--ias-secondary);">SHIT<span style="color: var(--ias-accent); margin-left: 4px;">■</span></span>
+          </div>
+          <div class="logo-cell-label">Primary — on white / light</div>
+        </div>
+        <div class="logo-cell logo-dark">
+          <div class="wordmark" style="color: var(--ias-white);">
+            <span class="line1">I AUTOMATE</span>
+            <span class="line2" style="color: #9BBEC0;">SHIT<span style="color: var(--ias-accent); margin-left: 4px;">■</span></span>
+          </div>
+          <div class="logo-cell-label" style="color: #4B7A8A;">Reversed — on primary dark</div>
+        </div>
+        <div class="logo-cell" style="background: var(--ias-light); border: 0.5px solid var(--ias-mid);">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 32px; height: 32px; background: var(--ias-primary); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-family: var(--f-mono); font-size: 12px; font-weight: 700; color: var(--ias-accent);">IAS</span>
+            </div>
+            <div style="font-family: var(--f-display); font-size: 14px; font-weight: 700; color: var(--ias-primary);">I Automate <span style="color: var(--ias-secondary);">Shit</span></div>
+          </div>
+          <div class="logo-cell-label">Horizontal lockup — compact</div>
+        </div>
+        <div class="logo-cell" style="background: var(--ias-accent);">
+          <div style="width: 36px; height: 36px; background: var(--ias-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: var(--f-mono); font-size: 13px; font-weight: 700; color: var(--ias-accent);">IAS</span>
+          </div>
+          <div class="logo-cell-label" style="color: var(--ias-primary);">Icon mark — on accent</div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <p style="font-size: 12px; font-weight: 500; margin-bottom: 0.75rem;">Clear space & minimum size</p>
+      <div style="display: flex; gap: 1.5rem; font-size: 12px; color: var(--ias-muted); font-family: var(--f-mono);">
+        <div>Minimum print size: <strong style="color: var(--ias-dark);">1 inch wide</strong></div>
+        <div>Minimum digital size: <strong style="color: var(--ias-dark);">120px wide</strong></div>
+        <div>Clear space: <strong style="color: var(--ias-dark);">½ cap-height on all sides</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 LAYOUT PRINCIPLES -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">04</span>
+      <span class="section-title">Layout Principles</span>
+    </div>
+    <div class="section-body">
+
+      <p style="font-size: 13px; color: var(--ias-dark); line-height: 1.6; margin-bottom: 1.25rem;">Every layout starts clean. The background is <span style="font-family: var(--f-mono); font-size: 11px; background: var(--ias-light); padding: 2px 5px; border-radius: 3px; border: 0.5px solid var(--ias-mid);">#FFFFFF</span> or <span style="font-family: var(--f-mono); font-size: 11px; background: var(--ias-light); padding: 2px 5px; border-radius: 3px; border: 0.5px solid var(--ias-mid);">#F9FAFB</span>. Color enters as a splash — a header bar, a left border accent, a single CTA button, a footer block.</p>
+
+      <div class="surface-demos">
+        <div class="sd">
+          <div class="sd-label">Letterhead</div>
+          <div class="sd-body">
+            <div class="lh">
+              <div class="lh-header">
+                <span class="lh-logo">I Automate <span>Shit</span></span>
+                <div class="lh-dot"></div>
+              </div>
+              <div class="lh-line dark" style="width: 80%;"></div>
+              <div class="lh-line dark short"></div>
+              <div class="lh-line dark" style="width: 70%; margin-top: 8px;"></div>
+              <div class="lh-line dark" style="width: 90%;"></div>
+              <div class="lh-line dark short"></div>
+              <div class="lh-accent-bar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="sd">
+          <div class="sd-label">Business Card</div>
+          <div class="sd-body">
+            <div class="bc-wrap">
+              <div class="bc">
+                <div class="bc-accent"></div>
+                <div class="bc-name">Your Name</div>
+                <div class="bc-title">Automation Engineer · n8n Specialist</div>
+                <div class="bc-url">iautomateshit.com</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sd">
+          <div class="sd-label">Landing Page Hero</div>
+          <div class="sd-body">
+            <div class="hero-mini">
+              <div class="hero-mini-nav">
+                <span class="hero-mini-logo">I Automate <span>Shit</span></span>
+                <span class="hero-mini-cta-sm">Book a Call</span>
+              </div>
+              <div class="hero-h">Stop Paying People<br><span>to Do Robot Work.</span></div>
+              <div class="hero-sub">n8n automation engineer.<br>Dallas, TX.</div>
+              <div class="hero-btn">Schedule a Call <span>→</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider">
+
+      <div>
+        <div class="usage-row">
+          <span class="usage-badge badge-do">DO</span>
+          <p class="usage-text">Lead with a white or #F9FAFB canvas. Use the primary color <em>(#0A2E36)</em> as a header band, sidebar, or footer block — never as the full page background on light-mode layouts.</p>
+        </div>
+        <div class="usage-row">
+          <span class="usage-badge badge-do">DO</span>
+          <p class="usage-text">Use the accent emerald <em>(#00E5A3)</em> for exactly one element per visible section — the primary CTA button, an active state, or a critical data callout. It loses its power the moment it appears twice in the same viewport.</p>
+        </div>
+        <div class="usage-row">
+          <span class="usage-badge badge-do">DO</span>
+          <p class="usage-text">Use a 4px left border in <em>#00E5A3</em> or <em>#3F7266</em> on callout cards, pull quotes, or stat blocks to inject brand color without painting a whole surface.</p>
+        </div>
+        <div class="usage-row">
+          <span class="usage-badge badge-dont">DON'T</span>
+          <p class="usage-text">Don't place the accent emerald on white text or use it as a background for body copy. It fails contrast. Emerald backgrounds carry dark <em>(#0A2E36)</em> text only.</p>
+        </div>
+        <div class="usage-row">
+          <span class="usage-badge badge-dont">DON'T</span>
+          <p class="usage-text">Don't use the secondary seafoam <em>(#3F7266)</em> as a CTA button. It reads as decorative, not interactive. Reserve it for secondary icons, dividers, and feature illustration.</p>
+        </div>
+        <div class="usage-row" style="border-bottom: none; padding-bottom: 0;">
+          <span class="usage-badge badge-when">WHEN</span>
+          <p class="usage-text">Dark-mode or full-bleed layouts (video overlays, t-shirt graphics, event banners) may invert — primary <em>(#0A2E36)</em> fills the canvas, white and accent carry the type.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 05 COMPONENTS -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">05</span>
+      <span class="section-title">UI Components & Badges</span>
+    </div>
+    <div class="section-body">
+
+      <p style="font-size: 12px; font-weight: 500; margin-bottom: 0.75rem;">Pill / tag taxonomy</p>
+      <div style="margin-bottom: 1.25rem;">
+        <span class="pill pill-primary">n8n Specialist</span>
+        <span class="pill pill-secondary">Automation Engineering</span>
+        <span class="pill pill-accent">Available for Work</span>
+        <span class="pill pill-outline">Dallas, TX</span>
+        <span class="pill pill-outline">Fortune 500 Pipeline Automation</span>
+      </div>
+
+      <hr class="divider">
+
+      <p style="font-size: 12px; font-weight: 500; margin-bottom: 0.75rem;">Button hierarchy</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.25rem;">
+        <button style="background: var(--ias-accent); color: var(--ias-primary); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">Schedule a Call →</button>
+        <button style="background: var(--ias-primary); color: var(--ias-white); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer;">View Portfolio →</button>
+        <button style="background: transparent; color: var(--ias-primary); font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; padding: 9px 19px; border-radius: 6px; border: 1.5px solid var(--ias-primary); cursor: pointer;">Learn More</button>
+      </div>
+      <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted);">Primary CTA → Emerald fill · Secondary action → Primary fill · Tertiary → Outline</p>
+
+      <hr class="divider">
+
+      <p style="font-size: 12px; font-weight: 500; margin-bottom: 0.75rem;">Stat / callout card</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div style="background: var(--ias-white); border: 0.5px solid var(--ias-mid); border-radius: 10px; padding: 1rem; border-top: 3px solid var(--ias-accent);">
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Hours Saved</p>
+          <p style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--ias-primary);">1,560</p>
+          <p style="font-size: 11px; color: var(--ias-muted);">per year · single workflow</p>
+        </div>
+        <div style="background: var(--ias-white); border: 0.5px solid var(--ias-mid); border-radius: 10px; padding: 1rem; border-top: 3px solid var(--ias-secondary);">
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Cost Eliminated</p>
+          <p style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--ias-primary);">$3K/mo</p>
+          <p style="font-size: 11px; color: var(--ias-muted);">VA + manual data entry</p>
+        </div>
+        <div style="background: var(--ias-primary); border-radius: 10px; padding: 1rem;">
+          <p style="font-family: var(--f-mono); font-size: 10px; color: #4B7A8A; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;">Automations Built</p>
+          <p style="font-family: 'Space Grotesk', sans-serif; font-size: 28px; font-weight: 700; color: var(--ias-white);">40+</p>
+          <p style="font-size: 11px; color: var(--ias-accent);">n8n · Make.com · Zapier</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 06 VOICE & TONE -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">06</span>
+      <span class="section-title">Voice & Tone</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 13px; color: var(--ias-dark); line-height: 1.6; margin-bottom: 1.25rem;">The brand name is a statement of intent, not an edge case. The voice matches: direct, technically credible, mildly irreverent, never performatively edgy. Speak to the operator who feels the pain — not the executive who signs the check.</p>
+      <div class="voice-grid">
+        <div class="voice-card yes" style="border-color: #D1FAE5;">
+          <div class="voice-card-label">Write this</div>
+          <p>"Your team is spending 3 hours a day on tasks I can eliminate in an afternoon."</p>
+        </div>
+        <div class="voice-card no" style="border-color: #FEE2E2;">
+          <div class="voice-card-label">Not this</div>
+          <p>"Leveraging cutting-edge AI-powered automation solutions to synergize your workflow ecosystem."</p>
+        </div>
+        <div class="voice-card yes" style="border-color: #D1FAE5;">
+          <div class="voice-card-label">Write this</div>
+          <p>"Here's exactly what I built, what it replaced, and what it saves per month."</p>
+        </div>
+        <div class="voice-card no" style="border-color: #FEE2E2;">
+          <div class="voice-card-label">Not this</div>
+          <p>"I'm passionate about helping businesses transform their digital journey through innovative automation."</p>
+        </div>
+        <div class="voice-card yes" style="border-color: #D1FAE5;">
+          <div class="voice-card-label">Write this</div>
+          <p>"// n8n node count: 7. Time saved: 40 hrs/week. Client cost: $0 ongoing."</p>
+        </div>
+        <div class="voice-card no" style="border-color: #FEE2E2;">
+          <div class="voice-card-label">Not this</div>
+          <p>"As a thought leader in the automation space, I bring a unique perspective to each engagement."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 APPLIED: T-SHIRT -->
+  <div class="section">
+    <div class="section-label">
+      <span class="section-num">07</span>
+      <span class="section-title">Applied: T-Shirt (Golf Strategy)</span>
+    </div>
+    <div class="section-body">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Back — Primary execution</p>
+          <div style="background: #111111; border-radius: 8px; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 160px; justify-content: center;">
+            <p style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: var(--ias-white); text-align: center; letter-spacing: -0.01em; line-height: 1.1;">I AUTOMATE<br><span style="color: var(--ias-accent);">SHIT.</span></p>
+            <div style="width: 40px; height: 2px; background: var(--ias-secondary);"></div>
+            <div style="background: var(--ias-white); border-radius: 4px; padding: 5px 8px; display: flex; align-items: center; gap: 5px;">
+              <div style="width: 20px; height: 20px; background: var(--ias-primary); border-radius: 3px; display: flex; align-items: center; justify-content: center;">
+                <span style="font-family: var(--f-mono); font-size: 7px; color: var(--ias-accent); font-weight: 700;">QR</span>
+              </div>
+              <span style="font-family: var(--f-mono); font-size: 9px; color: var(--ias-dark);">iautomateshit.com</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p style="font-family: var(--f-mono); font-size: 10px; color: var(--ias-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;">Front — Minimal mark</p>
+          <div style="background: #111111; border-radius: 8px; padding: 2rem 1.5rem; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; min-height: 160px;">
+            <div style="width: 28px; height: 28px; background: var(--ias-primary); border: 1.5px solid var(--ias-accent); border-radius: 5px; display: flex; align-items: center; justify-content: center; margin-left: 1.5rem;">
+              <span style="font-family: var(--f-mono); font-size: 9px; font-weight: 700; color: var(--ias-accent);">IAS</span>
+            </div>
+          </div>
+          <p style="font-size: 11px; color: var(--ias-muted); margin-top: 6px; line-height: 1.4;">Small IAS mark over left chest. Back carries the full statement + QR. Let the back do the talking — front is the tease.</p>
+        </div>
+      </div>
+      <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: var(--ias-light); border-radius: 6px; border-left: 3px solid var(--ias-accent);">
+        <p style="font-size: 12px; color: var(--ias-dark); line-height: 1.5; font-family: var(--f-mono);"><strong style="color: var(--ias-primary);">QR destination:</strong> A single-page landing site — no portfolio clutter. Headline, 3 stats, one booking button. Load time under 2 seconds. The shirt started the conversation. The page closes it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-strip">
+    <div>
+      <div class="footer-wm">I Automate <span>Shit.</span></div>
+      <p style="font-family: var(--f-mono); font-size: 10px; color: #4B7A8A; margin-top: 4px;">Brand Identity System · v1.0 · June 2026</p>
+    </div>
+    <div style="text-align: right;">
+      <p class="footer-note">Primary: #0A2E36</p>
+      <p class="footer-note">Secondary: #3F7266</p>
+      <p class="footer-note">Accent: #00E5A3</p>
+    </div>
+  </div>
+
+</div>

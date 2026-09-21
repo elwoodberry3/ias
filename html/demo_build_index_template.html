@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Claims Intake &amp; Triage — I Automate Shit</title>
+<meta name="description" content="Watch the engineer walkthrough, browse the build chapters, then try the live agentic claims intake system yourself.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* ════════════════════════════════════════════════════════════════
+     TEMPLATE — DEMO BUILD INDEX PAGE
+     This is the first page of every build. It is the VSL layer:
+     engineer video → context → chapter library → live interactive demo.
+     It sits IN FRONT OF the actual interactive build (e.g. the claim
+     intake screen), which lives on its own page and is linked from
+     the "Launch the live build" CTA near the bottom.
+
+     TO REUSE FOR THE NEXT BUILD: search this file for "TODO:" comments.
+     Every one marks a per-build variable — eyebrow/title/sector tag,
+     narrative copy, chapter list, and the live-demo link target.
+     CSS, nav, footer, and animation are inherited as-is. Do not
+     modify tokens, fonts, or component structure — brand consistency
+     across all 15 build index pages depends on this file staying
+     identical at the system level.
+     ════════════════════════════════════════════════════════════════ */
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary:   #0A2E36;
+    --secondary: #3F7266;
+    --accent:    #00E5A3;
+    --dark:      #111827;
+    --muted:     #6B7280;
+    --light:     #F9FAFB;
+    --white:     #FFFFFF;
+    --border:    #E5E7EB;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .mono { font-family: 'Space Mono', monospace; }
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* ── NAV (inherited from ias_home.html — do not modify) ─────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-icon {
+    width: 34px; height: 34px;
+    background: var(--primary);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-icon svg { display: block; }
+  .nav-wordmark { font-size: 15px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -0.01em; }
+  .nav-wordmark span { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: var(--primary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── BREADCRUMB ───────────────────────────────────────────── */
+  .breadcrumb {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 22px 2rem 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { text-decoration: none; transition: color 0.15s; }
+  .breadcrumb a:hover { color: var(--accent); }
+  .breadcrumb .sep { color: var(--border); }
+  .breadcrumb .current { color: var(--primary); }
+
+  /* ── BUILD HERO ───────────────────────────────────────────── */
+  .build-hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 20px 2rem 40px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 24px; height: 2px;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .build-headline {
+    font-size: clamp(32px, 5vw, 50px);
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+
+  .build-subhead {
+    font-size: 16px;
+    color: var(--muted);
+    max-width: 620px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+
+  .build-meta-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--secondary);
+    background: rgba(63,114,102,0.08);
+    border: 1px solid rgba(63,114,102,0.25);
+    padding: 5px 12px;
+    border-radius: 5px;
+    letter-spacing: 0.04em;
+  }
+  .meta-tag.accent-tag {
+    color: var(--primary);
+    background: rgba(0,229,163,0.12);
+    border-color: rgba(0,229,163,0.35);
+  }
+
+  /* ── ACCENT STRIP (inherited) ────────────────────────────── */
+  .accent-strip { display: flex; height: 5px; max-width: 860px; margin: 0 auto; }
+  .accent-strip .seg-primary { flex: 1; background: var(--primary); }
+  .accent-strip .seg-secondary { width: 80px; background: var(--secondary); }
+  .accent-strip .seg-accent { width: 40px; background: var(--accent); }
+
+  /* ── VIDEO HERO ───────────────────────────────────────────── */
+  .video-hero-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 2rem 0;
+  }
+
+  .video-frame {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 32px),
+      linear-gradient(135deg, var(--primary) 0%, #0d3a43 100%);
+    border: 1px solid rgba(0,229,163,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* TODO: when the real video is ready, replace this placeholder
+     div with an <iframe> (YouTube/Vimeo embed) or a native <video>
+     tag sized to fill .video-frame. Remove .video-placeholder. */
+  .video-placeholder { text-align: center; }
+
+  .play-button {
+    width: 68px; height: 68px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    box-shadow: 0 0 0 0 rgba(0,229,163,0.4);
+    animation: pulse-ring 2.4s ease-out infinite;
+  }
+  .play-button svg { margin-left: 4px; }
+
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(0,229,163,0.35); }
+    70%  { box-shadow: 0 0 0 16px rgba(0,229,163,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,229,163,0); }
+  }
+
+  .placeholder-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .placeholder-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .video-caption-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 2px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .video-narrator {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  .video-narrator span {
+    display: block;
+    font-weight: 500;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 1px;
+  }
+  .runtime-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--light);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── SECTION (inherited pattern) ─────────────────────────── */
+  .section {
+    padding: 56px 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--primary);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .section-headline {
+    font-size: clamp(22px, 3.2vw, 30px);
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    line-height: 1.18;
+  }
+
+  /* ── NARRATIVE TEXT ───────────────────────────────────────── */
+  .narrative-section p {
+    font-size: 15px;
+    color: var(--dark);
+    line-height: 1.75;
+    max-width: 640px;
+    margin-bottom: 16px;
+  }
+  .narrative-section p:last-child { margin-bottom: 0; }
+  .narrative-section strong { color: var(--primary); }
+
+  /* ── CHAPTER LIBRARY ──────────────────────────────────────── */
+  .chapters-section { padding-top: 16px; }
+
+  .full-build-card {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 28px;
+    align-items: center;
+    transition: box-shadow 0.2s;
+  }
+  .full-build-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+  .mini-thumb {
+    aspect-ratio: 16/9;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--primary), #0d3a43);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .mini-play {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .full-build-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--primary);
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .full-build-title { font-size: 17px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+  .full-build-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+  .full-build-meta { display: flex; align-items: center; gap: 10px; }
+  .watch-link {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .watch-link .arrow { color: var(--accent); transition: transform 0.15s; }
+  .full-build-card:hover .watch-link .arrow { transform: translateX(3px); }
+
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .chapter-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .chapter-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+  .chapter-thumb {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #16424b, var(--primary));
+    display: flex;
+    align-items: flex-end;
+    padding: 10px;
+    position: relative;
+  }
+  .chapter-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .chapter-thumb .mini-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px; height: 32px;
+  }
+
+  .chapter-body { padding: 14px 16px 16px; }
+  .chapter-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px; line-height: 1.3; }
+  .chapter-desc { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+  .chapter-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--light);
+    padding-top: 10px;
+  }
+
+  /* ── LIVE DEMO SECTION ────────────────────────────────────── */
+  .live-demo-bg {
+    background: var(--primary);
+    padding: 64px 2rem;
+  }
+  .live-demo-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .live-demo-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .live-demo-headline {
+    font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    line-height: 1.18;
+    margin-bottom: 14px;
+  }
+  .live-demo-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+    margin-bottom: 26px;
+  }
+  .btn-launch {
+    background: var(--accent);
+    color: var(--primary);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-launch:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+  .btn-launch .arrow { font-size: 18px; line-height: 1; }
+
+  /* Abstract mock of the app window — not a screenshot, a built
+     representation of the real dashboard chrome (header, stepper,
+     content blocks) so the preview is honest about what it shows. */
+  .app-mock {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(0,229,163,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .app-mock-bar {
+    background: rgba(255,255,255,0.05);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .app-mock-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+  .app-mock-steps { display: flex; height: 3px; }
+  .app-mock-steps span { flex: 1; background: rgba(255,255,255,0.1); }
+  .app-mock-steps span:first-child { background: var(--accent); }
+  .app-mock-body { padding: 18px; }
+  .app-mock-line { height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-bottom: 10px; }
+  .app-mock-line.w60 { width: 60%; }
+  .app-mock-line.w40 { width: 40%; }
+  .app-mock-block {
+    height: 56px;
+    border: 1.5px dashed rgba(255,255,255,0.15);
+    border-radius: 7px;
+    margin-top: 14px;
+  }
+
+  /* ── CLOSING CTA ──────────────────────────────────────────── */
+  .closing-cta {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 64px 2rem;
+    text-align: center;
+  }
+  .closing-headline {
+    font-size: clamp(22px, 3vw, 28px);
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .closing-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--white);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 14px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(10,46,54,0.18); }
+  .btn-primary .arrow { color: var(--accent); font-size: 18px; line-height: 1; }
+  .btn-secondary {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s;
+  }
+  .btn-secondary:hover { color: var(--primary); }
+
+  /* ── FOOTER (inherited) ───────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-left { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--muted); }
+  .footer-left strong { color: var(--primary); font-weight: 700; }
+  .footer-left span { color: var(--accent); }
+  .footer-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  /* ── SCROLL REVEAL (inherited) ───────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 680px) {
+    nav { padding: 0 1.25rem; }
+    .breadcrumb { padding: 18px 1.25rem 0; }
+    .build-hero { padding: 16px 1.25rem 32px; }
+    .video-hero-section { padding: 36px 1.25rem 0; }
+    .section { padding: 44px 1.25rem; }
+    .chapter-grid { grid-template-columns: 1fr; }
+    .full-build-card { grid-template-columns: 1fr; }
+    .live-demo-bg { padding: 48px 1.25rem; }
+    .live-demo-inner { grid-template-columns: 1fr; gap: 32px; }
+    .closing-cta { padding: 48px 1.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="ias_home.html" class="nav-logo">
+    <div class="nav-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="14" height="11" rx="2" stroke="#00E5A3" stroke-width="1.5" fill="none"/>
+        <rect x="6.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+        <rect x="10.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+        <rect x="6.5" y="12" width="7" height="1.5" rx="0.5" fill="#3F7266"/>
+        <line x1="10" y1="3" x2="10" y2="5" stroke="#00E5A3" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="nav-wordmark">I Automate <span>Shit</span></div>
+  </a>
+  <a href="ias_home.html#book" class="nav-cta">Book a Call</a>
+</nav>
+
+<!-- BREADCRUMB — TODO: update sector/build labels per build -->
+<div class="breadcrumb">
+  <a href="demos.html">All Builds</a>
+  <span class="sep">/</span>
+  <a href="demos.html#banking-finance-fintech-insurance">Banking, Finance, FinTech &amp; Insurance</a>
+  <span class="sep">/</span>
+  <span class="current">Agentic Claims Intake &amp; Triage</span>
+</div>
+
+<!-- BUILD HERO — TODO: eyebrow, headline, subhead, meta tags are per-build -->
+<section class="build-hero">
+  <p class="hero-eyebrow">Build 01 · Flagship</p>
+  <h1 class="build-headline">Agentic Claims Intake &amp; Triage</h1>
+  <p class="build-subhead">Upload a claim. Watch the agent extract entities, run RAG-grounded coverage lookup, cross-check for fraud, and escalate to a human when confidence drops.</p>
+  <div class="build-meta-row">
+    <span class="meta-tag accent-tag">Banking, Finance, FinTech &amp; Insurance</span>
+    <span class="meta-tag">n8n</span>
+    <span class="meta-tag">Wix Studio + Velo</span>
+    <span class="meta-tag">RAG</span>
+    <span class="meta-tag">Multi-agent</span>
+  </div>
+</section>
+
+<div class="accent-strip">
+  <div class="seg-primary"></div>
+  <div class="seg-secondary"></div>
+  <div class="seg-accent"></div>
+</div>
+
+<!-- VIDEO HERO: engineer walkthrough -->
+<section class="video-hero-section reveal">
+  <div class="video-frame">
+    <!-- TODO: replace this placeholder with the real embed once recorded -->
+    <div class="video-placeholder">
+      <div class="play-button">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M6 4L18 11L6 18V4Z" fill="#0A2E36"/>
+        </svg>
+      </div>
+      <div class="placeholder-label">// Engineer walkthrough</div>
+      <div class="placeholder-sub">Video coming soon</div>
+    </div>
+  </div>
+  <div class="video-caption-row">
+    <div class="video-narrator">
+      Elwood (Steve) Berry
+      <span>Why and how this build works, straight from the person who built it</span>
+    </div>
+    <span class="runtime-pill">Runtime: —:—</span>
+  </div>
+</section>
+
+<!-- NARRATIVE — TODO: per-build "why I built this" copy -->
+<section class="section narrative-section reveal">
+  <div class="section-eyebrow">// Why I built this</div>
+  <h2 class="section-headline">A working version of what your adjusters would use.</h2>
+  <p>Claims processing is paperwork-heavy, deadline-driven, and exactly where an agentic system either proves itself or falls apart. I built this to demonstrate one specific thing most AI demos skip: <strong>a system that knows when to stop and ask a human.</strong></p>
+  <p>The agent extracts the claim, checks coverage against real policy clauses with citations attached, and screens for fraud signals — all visible, step by step, not hidden behind a black box. When the confidence score drops below threshold, the workflow pauses and hands the decision to a person instead of guessing.</p>
+  <p>Everything below is the real build: the same n8n workflow and dashboard you can click through yourself at the bottom of this page.</p>
+</section>
+
+<!-- CHAPTER LIBRARY — TODO: chapter list is per-build. Numbered because
+     these chapters ARE a real sequence — they follow the actual order
+     the agent executes in. -->
+<section class="section chapters-section reveal">
+  <div class="section-eyebrow">// Watch the build</div>
+  <h2 class="section-headline">One full walkthrough. Five chapters if you want the detail.</h2>
+
+  <a href="#" class="full-build-card">
+    <div class="mini-thumb">
+      <div class="mini-play">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M4 2.5L11 7L4 11.5V2.5Z" fill="#0A2E36"/>
+        </svg>
+      </div>
+    </div>
+    <div>
+      <span class="full-build-label">Full build</span>
+      <div class="full-build-title">Agentic Claims Intake — Start to Finish</div>
+      <div class="full-build-desc">The complete run: upload through escalation through audit log. No cuts.</div>
+      <div class="full-build-meta">
+        <span class="watch-link">Watch full build <span class="arrow">→</span></span>
+        <span class="runtime-pill">—:—</span>
+      </div>
+    </div>
+  </a>
+
+  <div class="chapter-grid">
+
+    <a href="#" class="chapter-card">
+      <div class="chapter-thumb">
+        <span class="chapter-num">01</span>
+        <div class="mini-play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 2L9.5 6L3.5 10V2Z" fill="#0A2E36"/></svg>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-title">Claim Intake &amp; Extraction</div>
+        <div class="chapter-desc">Upload triggers structured extraction — claimant, policy number, incident date, claim type — validated against schema before anything else runs.</div>
+        <div class="chapter-foot">
+          <span class="watch-link">Watch <span class="arrow">→</span></span>
+          <span class="runtime-pill">—:—</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="chapter-card">
+      <div class="chapter-thumb">
+        <span class="chapter-num">02</span>
+        <div class="mini-play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 2L9.5 6L3.5 10V2Z" fill="#0A2E36"/></svg>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-title">Policy Coverage RAG</div>
+        <div class="chapter-desc">Vector search over policy documents returns the specific clauses driving the coverage call — cited, not guessed.</div>
+        <div class="chapter-foot">
+          <span class="watch-link">Watch <span class="arrow">→</span></span>
+          <span class="runtime-pill">—:—</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="chapter-card">
+      <div class="chapter-thumb">
+        <span class="chapter-num">03</span>
+        <div class="mini-play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 2L9.5 6L3.5 10V2Z" fill="#0A2E36"/></svg>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-title">Fraud Signal Cross-Check</div>
+        <div class="chapter-desc">Historical claim patterns plus rule-based checks combine into one fraud risk score with a plain-language explanation.</div>
+        <div class="chapter-foot">
+          <span class="watch-link">Watch <span class="arrow">→</span></span>
+          <span class="runtime-pill">—:—</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="chapter-card">
+      <div class="chapter-thumb">
+        <span class="chapter-num">04</span>
+        <div class="mini-play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 2L9.5 6L3.5 10V2Z" fill="#0A2E36"/></svg>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-title">Confidence Gate &amp; Human-in-the-Loop</div>
+        <div class="chapter-desc">Confidence and fraud scores roll into one gate. Below threshold, the agent stops — on screen, that's a 0.74 escalating to review.</div>
+        <div class="chapter-foot">
+          <span class="watch-link">Watch <span class="arrow">→</span></span>
+          <span class="runtime-pill">—:—</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#" class="chapter-card">
+      <div class="chapter-thumb">
+        <span class="chapter-num">05</span>
+        <div class="mini-play">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3.5 2L9.5 6L3.5 10V2Z" fill="#0A2E36"/></svg>
+        </div>
+      </div>
+      <div class="chapter-body">
+        <div class="chapter-title">Audit Log &amp; Evaluation</div>
+        <div class="chapter-desc">Every step is timestamped and logged. A small evaluation set scores the system the same way you'd score an adjuster.</div>
+        <div class="chapter-foot">
+          <span class="watch-link">Watch <span class="arrow">→</span></span>
+          <span class="runtime-pill">—:—</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- LIVE DEMO — TODO: href should point to the deployed standalone
+     wrapper page for this build (e.g. /demos/claims/) once built -->
+<section class="live-demo-bg">
+  <div class="live-demo-inner">
+    <div class="reveal">
+      <div class="live-demo-eyebrow">// Try it yourself</div>
+      <h2 class="live-demo-headline">This isn't a recording. It's running.</h2>
+      <p class="live-demo-desc">Upload a mock claim and watch the agent work in real time — extraction, coverage lookup, fraud check, confidence gate, audit log. Same system as the videos above, no script.</p>
+      <a href="build_01__claim_intake_screen.html" class="btn-launch">
+        Launch the live build
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <div class="app-mock reveal">
+      <div class="app-mock-bar">
+        <span class="app-mock-dot"></span><span class="app-mock-dot"></span><span class="app-mock-dot"></span>
+      </div>
+      <div class="app-mock-steps">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="app-mock-body">
+        <div class="app-mock-line w60"></div>
+        <div class="app-mock-line w40"></div>
+        <div class="app-mock-block"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING CTA -->
+<section class="closing-cta reveal">
+  <h2 class="closing-headline">Want something like this running on your queue?</h2>
+  <div class="closing-actions">
+    <a href="ias_home.html#book" class="btn-primary">
+      Schedule a 30-min call
+      <span class="arrow">→</span>
+    </a>
+    <a href="demos.html" class="btn-secondary">See all 15 builds ↓</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>I Automate <span>Shit</span></strong> · Automation Engineering · Aubrey / Frisco, TX
+  </div>
+  <div class="footer-dot"></div>
+</footer>
+
+<script>
+  // Scroll reveal — identical pattern to ias_home.html
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => { entry.target.classList.add('visible'); }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

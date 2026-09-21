@@ -1,0 +1,56 @@
+<!--
+  ==============================================================================
+  TEMPLATE:       Token Budget (Dark Mode)
+  FILE ID:        body__token.budget__dark.mode.html
+  VERSION:        1.0.0
+  DESCRIPTION:    IAS Bootcamp email template.
+  
+  MAINTAINER:     ???? <design-system@domain.com>
+  LAST UPDATED:   ????
+  DOCUMENTATION:  ????
+  
+  [BUILD ARTIFACT] - DO NOT MODIFY DIRECTLY. SOURCE IN src/templates/
+  ==============================================================================
+-->
+
+
+<span style="display:inline-block;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#991B1B;background:#FEE2E2;border:1px solid #FCA5A5;padding:4px 10px;border-radius:5px;margin-bottom:16px;">
+AGENT EXECUTION PAUSED
+</span>
+
+<h1 class="h1" style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#0A2E36;line-height:1.15;letter-spacing:-0.01em;margin:0 0 14px;">
+Token budget threshold hit on your cluster.
+</h1>
+
+<p style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#111827;margin:0 0 18px;">
+Your agent on node <code style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:14px;color:#0A2E36;background:#F4F7F6;padding:2px 6px;border-radius:4px;">dev-mesh-04</code> was intercepted. The system flagged an accelerating cost pattern that used 85% of your weekly tier in the last 12 minutes.
+</p>
+    
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FEF2F2;border:1px solid #FCA5A5;border-left:4px solid #DC2626;border-radius:8px;margin:8px 0 24px;">
+    <tr>
+        <td style="padding:18px 20px;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;line-height:1.7;color:#111827;">
+
+            <div style="color:#991B1B;font-weight:700;margin-bottom:8px;">⚠ Diagnostic Telemetry</div>
+            • Loop state: uncaught structural recursion<br>
+            • Spend: $42.50 / $50.00 limit<br>
+            • Last action: Claude Sonnet vector write
+
+        </td>
+    </tr>
+</table>
+    
+<p style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#111827;margin:0 0 18px;">
+We paused the process automatically to protect your budget. Review the logic block, fix the escape parameters, and re-initialize below.
+</p>
+    
+<!-- CTA BUTTON : BEGIN -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:8px 0 6px;">
+    <tr>
+        <td align="center">
+            <a href="#" style="width:100%;display:block;background:#0A2E36;color:#FFFFFF;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;text-align:center;padding:16px 28px;border-radius:6px;letter-spacing:0.01em;width: inherit;">
+                Unlock Compute Node &amp; Refactor &rarr;
+            </a>
+        </td>
+    </tr>
+</table>
+<!-- CTA BUTTON : END -->

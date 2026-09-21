@@ -1,0 +1,217 @@
+<!--
+  ==============================================================================
+  TEMPLATE:       Email Body Template (Dark Mode)
+  FILE ID:        body__dark.mode.html
+  VERSION:        1.0.0
+  DESCRIPTION:    IAS Bootcamp email template.
+  
+  MAINTAINER:     ???? <design-system@domain.com>
+  LAST UPDATED:   ????
+  DOCUMENTATION:  ????
+  
+  [BUILD ARTIFACT] - DO NOT MODIFY DIRECTLY. SOURCE IN src/templates/
+  ==============================================================================
+-->
+  
+<!DOCTYPE html>
+<html lang="en">
+  <!-- HEADER -->
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="color-scheme" content="light only">
+    <meta name="supported-color-schemes" content="light">
+    <title>Email Body (Dark Mode)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      a { color:#0A2E36; }
+      @media screen and (max-width:600px) {
+        .card { width:100% !important; border-radius:0 !important; }
+        .pad { padding-left:20px !important; padding-right:20px !important; }
+        .h1 { font-size:24px !important; }
+        .stackbtn { display:block !important; width:100% !important; margin:0 0 10px 0 !important; }
+      }
+    </style>
+  </head>
+  <body style="margin:0;padding:0;background:#F9FAFB;">
+    
+    <!-- PREHEADER -->
+    <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#F9FAFB;">Execution paused — you hit 85% of your weekly token tier. Review and re-initialize.</div>
+
+    <!-- EMAIL LAYOUT (DARK MODE) -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F9FAFB;">
+      <tr>
+        <td align="center" style="padding:32px 12px;">
+
+          <table role="presentation" class="card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;">
+            
+            <!-- HEADER -->
+            <tr>
+              <td style="background:#0A2E36;padding:26px 24px 22px;text-align:center;border-radius:12px 12px 0 0;">
+                
+                <!-- LOGO : BEGIN -->
+                <a href="https://www.i-automate-shit.com" style="text-decoration:none;">
+                  <img src="./imgs/logo_dark.mode.png" alt="Logo" width="150" style="display:block;margin:0 auto;">
+                </a>
+                <!-- LOGO : END -->
+
+                <div style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;letter-spacing:0.14em;color:#00E5A3;text-transform:uppercase;margin-top:16px;">
+                  // EMAIL TITLE GOES HERE
+                </div>
+              </td>
+            </tr>
+            
+            <!-- BORDER -->
+            <tr>
+              <td style="height:6px;padding:0;font-size:0;line-height:0;">
+
+                <!-- BORDER : BEGIN -->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td width="60%" style="background:#0A2E36;height:6px;"></td>
+                    <td width="30%" style="background:#3F7266;height:6px;"></td>
+                    <td width="10%" style="background:#00E5A3;height:6px;"></td>
+                  </tr>
+                </table>
+                <!-- BORDER : END -->
+
+              </td>
+            </tr>
+
+            <!-- BODY -->
+            <tr>
+              <td class="pad" style="padding:32px 36px 8px;">
+                <!-- BODY : BEGIN -->
+
+<span style="display:inline-block;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#991B1B;background:#FEE2E2;border:1px solid #FCA5A5;padding:4px 10px;border-radius:5px;margin-bottom:16px;">
+AGENT EXECUTION PAUSED
+</span>
+
+<h1 class="h1" style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#0A2E36;line-height:1.15;letter-spacing:-0.01em;margin:0 0 14px;">
+Token budget threshold hit on your cluster.
+</h1>
+
+<p style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#111827;margin:0 0 18px;">
+Your agent on node <code style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:14px;color:#0A2E36;background:#F4F7F6;padding:2px 6px;border-radius:4px;">dev-mesh-04</code> was intercepted. The system flagged an accelerating cost pattern that used 85% of your weekly tier in the last 12 minutes.
+</p>
+    
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FEF2F2;border:1px solid #FCA5A5;border-left:4px solid #DC2626;border-radius:8px;margin:8px 0 24px;">
+    <tr>
+        <td style="padding:18px 20px;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13px;line-height:1.7;color:#111827;">
+
+            <div style="color:#991B1B;font-weight:700;margin-bottom:8px;">⚠ Diagnostic Telemetry</div>
+            • Loop state: uncaught structural recursion<br>
+            • Spend: $42.50 / $50.00 limit<br>
+            • Last action: Claude Sonnet vector write
+
+        </td>
+    </tr>
+</table>
+    
+<p style="font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.6;color:#111827;margin:0 0 18px;">
+We paused the process automatically to protect your budget. Review the logic block, fix the escape parameters, and re-initialize below.
+</p>
+    
+<!-- CTA BUTTON : BEGIN -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:8px 0 6px;">
+    <tr>
+        <td align="center">
+            <a href="#" style="width:100%;display:block;background:#0A2E36;color:#FFFFFF;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:15px;font-weight:700;text-decoration:none;text-align:center;padding:16px 28px;border-radius:6px;letter-spacing:0.01em;width: inherit;">
+                Unlock Compute Node &amp; Refactor &rarr;
+            </a>
+        </td>
+    </tr>
+</table>
+<!-- CTA BUTTON : END -->
+
+
+                <!-- BODY : ENDS -->
+              </td>
+            </tr>
+
+            <!-- FOOTER: BORDER -->
+             <tr>
+              <td style="padding:8px 36px 4px;">
+                <hr style="border:none;border-top:1px solid #E5E7EB;margin:24px 0 20px;">
+              </td>
+            </tr>
+
+            <!-- FOOTER: LOGO -->
+             <tr>
+              <td style="padding:0 24px 8px;text-align:center;">
+                <!-- LOGO : BEGIN -->
+                <a href="https://www.i-automate-shit.com" style="text-decoration:none;">
+                  <img src="./imgs/logo_light.mode.png" alt="Logo" width="175" style="display:block;margin:0 auto;">
+                </a>
+                <!-- LOGO : END-->
+              </td>
+            </tr>
+
+            <!-- FOOTER: SOCIAL MEDIA BAR-->
+            <tr>
+              <td style="padding:14px 24px 6px;text-align:center;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto;">
+                  <tr>
+                    <td style="padding:0 5px;">
+                      <a href="https://www.linkedin.com/company/ias-bootcamp" style="text-decoration:none;">
+                        <img src="./imgs/icon_linkedin.jpg" alt="LinkedIn" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                      <a href="https://www.facebook.com/profile.php?id=61593049247788" style="text-decoration:none;">
+                        <img src="./imgs/icon_facebook.jpg" alt="Facebook" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                        <a href="https://www.instagram.com/iautomatesht" style="text-decoration:none;">
+                        <img src="./imgs/icon_instagram.jpg" alt="Instagram" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                      <a href="https://www.threads.com/@iautomatesht" style="text-decoration:none;">
+                        <img src="./imgs/icon_threads.jpg" alt="Threads" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                      <a href="https://www.tiktok.com/@iautomateshit" style="text-decoration:none;">
+                        <img src="./imgs/icon_tiktok.jpg" alt="TikTok" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                      <a href="https://x.com/iautomaterobots" style="text-decoration:none;">
+                        <img src="./imgs/icon_twitter.jpg" alt="Twitter" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                    <td style="padding:0 5px;">
+                      <a href="https://www.youtube.com/@iautomatesht" style="text-decoration:none;">
+                        <img src="./imgs/icon_youtube.jpg" alt="YouTube" width="24" height="24" style="display:block;border:0;">
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- FOOTER: LINKS -->
+            <tr>
+              <td style="padding:50px 0;text-align:center;">
+                <p style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;color:#6B7280;margin:0 0 4px;">I Automate Shit...™ · Dallas, TX</p>
+                <p style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px;color:#6B7280;margin:0;">
+                  <a href="https://www.i-automate-shit.com/" style="color:#3F7266;text-decoration:underline;">i-automate-shit.com</a> &nbsp;·&nbsp;
+                  <a href="https://www.iasbootcamp.com/" style="color:#3F7266;text-decoration:underline;">iasbootcamp.com</a> &nbsp;·&nbsp;
+                  <a href="{{unsubscribe_url}}" style="color:#6B7280;text-decoration:underline;">Unsubscribe</a>
+                </p>
+              </td>
+            </tr>
+
+          </table>
+
+          <p style="font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:10px;color:#6B7280;margin:16px 0 0;">Built once. Distributed everywhere.</p>
+
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

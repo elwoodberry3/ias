@@ -1,0 +1,206 @@
+
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Claim intake screen for the agentic claims workflow dashboard, showing file upload, claim type selection, and processing status states</h2>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap');
+.ias-app { font-family: 'Space Grotesk', sans-serif; background: #FFFFFF; border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); overflow: hidden; }
+.ias-mono { font-family: 'Space Mono', monospace; }
+.ias-drop { border: 1.5px dashed #E5E7EB; transition: border-color 0.15s, background 0.15s; }
+.ias-drop.drag { border-color: #00E5A3; background: rgba(0,229,163,0.05); }
+.ias-type-card { border: 1px solid #E5E7EB; cursor: pointer; transition: all 0.15s; }
+.ias-type-card.selected { border-color: #00E5A3; background: rgba(0,229,163,0.04); }
+.ias-type-card.selected .ias-type-icon { background: #0A2E36; border-color: #00E5A3; }
+.ias-type-card.selected .ias-type-icon i { color: #00E5A3; }
+.ias-submit { background: #00E5A3; color: #0A2E36; border: none; font-family: 'Space Grotesk', sans-serif; font-weight: 700; cursor: pointer; transition: opacity 0.15s; }
+.ias-submit:hover { opacity: 0.9; }
+.ias-submit:disabled { background: #E5E7EB; color: #9CA3AF; cursor: not-allowed; }
+.step-pill { font-family: 'Space Mono', monospace; font-size: 10px; padding: 3px 9px; border-radius: 4px; letter-spacing: 0.06em; }
+</style>
+
+<div class="ias-app">
+
+  <div style="background:#0A2E36; padding:16px 22px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; height:30px; border:1.5px solid rgba(0,229,163,0.3); border-radius:7px; display:flex; align-items:center; justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+          <rect x="3" y="5" width="14" height="11" rx="2" stroke="#00E5A3" stroke-width="1.5" fill="none"/>
+          <rect x="6.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+          <rect x="10.5" y="8" width="3" height="2.5" rx="0.75" fill="#00E5A3"/>
+          <rect x="6.5" y="12" width="7" height="1.5" rx="0.5" fill="#3F7266"/>
+        </svg>
+      </div>
+      <div style="font-size:13px; font-weight:700; color:#FFFFFF;">Claims Agent <span style="color:#00E5A3;">v1</span></div>
+    </div>
+    <div class="ias-mono" style="font-size:10px; color:#5C8A8C; letter-spacing:0.08em; text-transform:uppercase;">Claim intake</div>
+  </div>
+
+  <div style="display:flex; height:4px;">
+    <div style="flex:1; background:#00E5A3;"></div>
+    <div style="flex:1; background:#E5E7EB;"></div>
+    <div style="flex:1; background:#E5E7EB;"></div>
+    <div style="flex:1; background:#E5E7EB;"></div>
+    <div style="flex:1; background:#E5E7EB;"></div>
+  </div>
+  <div style="display:flex; justify-content:space-between; padding:8px 22px 0;" class="ias-mono">
+    <span style="font-size:9px; color:#0A2E36; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;">1 Intake</span>
+    <span style="font-size:9px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em;">2 Reasoning</span>
+    <span style="font-size:9px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em;">3 Results</span>
+    <span style="font-size:9px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em;">4 Review</span>
+    <span style="font-size:9px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em;">5 Audit log</span>
+  </div>
+
+  <div style="padding:24px 22px 22px;">
+
+    <p class="ias-mono" style="font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#00E5A3; background:#0A2E36; display:inline-block; padding:3px 10px; border-radius:4px; margin-bottom:12px;">// new claim</p>
+    <h1 style="font-size:22px; font-weight:700; color:#0A2E36; letter-spacing:-0.02em; margin-bottom:4px;">Submit a claim for processing</h1>
+    <p style="font-size:13px; color:#6B7280; margin-bottom:20px;">Upload the claim document. The agent extracts details, checks coverage, and screens for fraud signals automatically.</p>
+
+    <p style="font-size:12px; font-weight:700; color:#0A2E36; margin-bottom:10px;">Claim type</p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px;">
+
+      <div class="ias-type-card selected" style="border-radius:var(--border-radius-md); padding:14px 12px; text-align:center;" onclick="selectType(this)">
+        <div class="ias-type-icon" style="width:32px; height:32px; border-radius:7px; background:#F9FAFB; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; margin:0 auto 8px;">
+          <i class="ti ti-car" style="font-size:16px; color:#3F7266;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:#0A2E36;">Auto</div>
+      </div>
+
+      <div class="ias-type-card" style="border-radius:var(--border-radius-md); padding:14px 12px; text-align:center;" onclick="selectType(this)">
+        <div class="ias-type-icon" style="width:32px; height:32px; border-radius:7px; background:#F9FAFB; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; margin:0 auto 8px;">
+          <i class="ti ti-home" style="font-size:16px; color:#3F7266;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:#0A2E36;">Property</div>
+      </div>
+
+      <div class="ias-type-card" style="border-radius:var(--border-radius-md); padding:14px 12px; text-align:center;" onclick="selectType(this)">
+        <div class="ias-type-icon" style="width:32px; height:32px; border-radius:7px; background:#F9FAFB; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; margin:0 auto 8px;">
+          <i class="ti ti-briefcase" style="font-size:16px; color:#3F7266;" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:12px; font-weight:700; color:#0A2E36;">Workers' comp</div>
+      </div>
+
+    </div>
+
+    <p style="font-size:12px; font-weight:700; color:#0A2E36; margin-bottom:10px;">Claim document</p>
+    <div class="ias-drop" id="dropzone" style="border-radius:var(--border-radius-md); padding:32px 20px; text-align:center; margin-bottom:8px;"
+         ondragover="event.preventDefault(); this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="event.preventDefault(); this.classList.remove('drag'); handleFile()"
+         onclick="handleFile()">
+      <div id="drop-empty">
+        <i class="ti ti-file-upload" style="font-size:28px; color:#3F7266; display:block; margin-bottom:8px;" aria-hidden="true"></i>
+        <p style="font-size:13px; font-weight:700; color:#0A2E36; margin-bottom:2px;">Drop claim document or click to browse</p>
+        <p class="ias-mono" style="font-size:10px; color:#9CA3AF;">PDF, DOCX, or EML &middot; max 25MB</p>
+      </div>
+      <div id="drop-filled" style="display:none; text-align:left; display:flex; align-items:center; gap:12px;">
+        <div style="width:36px; height:36px; border-radius:7px; background:#0A2E36; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <i class="ti ti-file-text" style="font-size:18px; color:#00E5A3;" aria-hidden="true"></i>
+        </div>
+        <div style="flex:1;">
+          <p style="font-size:13px; font-weight:700; color:#0A2E36; margin:0;">claim_2026_0614_auto.pdf</p>
+          <p class="ias-mono" style="font-size:10px; color:#9CA3AF; margin:2px 0 0;">1.2 MB &middot; uploaded</p>
+        </div>
+        <i class="ti ti-check" style="font-size:18px; color:#00E5A3;" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <div style="background:#F9FAFB; border-radius:var(--border-radius-md); padding:12px 14px; display:flex; gap:10px; margin-bottom:22px;">
+      <i class="ti ti-info-circle" style="font-size:16px; color:#3F7266; flex-shrink:0; margin-top:1px;" aria-hidden="true"></i>
+      <p style="font-size:12px; color:#6B7280; line-height:1.5; margin:0;">The agent will extract claimant details, check coverage against policy documents, and run a fraud cross-check. Estimated processing time: <span style="color:#0A2E36; font-weight:700;">30-90 seconds</span>.</p>
+    </div>
+
+    <button class="ias-submit" id="submit-btn" style="width:100%; padding:14px; border-radius:var(--border-radius-md); font-size:14px; display:flex; align-items:center; justify-content:center; gap:8px;" onclick="submitClaim()">
+      <i class="ti ti-player-play" style="font-size:16px;" aria-hidden="true"></i>
+      Submit claim for processing
+    </button>
+
+    <div id="status-area" style="display:none; margin-top:18px;">
+      <div style="border:1px solid #E5E7EB; border-radius:var(--border-radius-md); padding:14px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span style="font-size:12px; font-weight:700; color:#0A2E36;">Claim CLM-2026-0614-A</span>
+          <span class="step-pill ias-mono" style="background:#FAEEDA; color:#854F0B;">processing</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;" id="step-list">
+          <div class="step-row" data-step="0" style="display:flex; align-items:center; gap:10px; font-size:12px; color:#9CA3AF;">
+            <i class="ti ti-circle-dashed" style="font-size:15px;" aria-hidden="true"></i>
+            <span>Uploading document</span>
+          </div>
+          <div class="step-row" data-step="1" style="display:flex; align-items:center; gap:10px; font-size:12px; color:#9CA3AF;">
+            <i class="ti ti-circle-dashed" style="font-size:15px;" aria-hidden="true"></i>
+            <span>Extracting claim details</span>
+          </div>
+          <div class="step-row" data-step="2" style="display:flex; align-items:center; gap:10px; font-size:12px; color:#9CA3AF;">
+            <i class="ti ti-circle-dashed" style="font-size:15px;" aria-hidden="true"></i>
+            <span>Checking policy coverage</span>
+          </div>
+          <div class="step-row" data-step="3" style="display:flex; align-items:center; gap:10px; font-size:12px; color:#9CA3AF;">
+            <i class="ti ti-circle-dashed" style="font-size:15px;" aria-hidden="true"></i>
+            <span>Running fraud cross-check</span>
+          </div>
+          <div class="step-row" data-step="4" style="display:flex; align-items:center; gap:10px; font-size:12px; color:#9CA3AF;">
+            <i class="ti ti-circle-dashed" style="font-size:15px;" aria-hidden="true"></i>
+            <span>Finalizing determination</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let fileUploaded = false;
+
+function selectType(el) {
+  document.querySelectorAll('.ias-type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function handleFile() {
+  fileUploaded = true;
+  document.getElementById('drop-empty').style.display = 'none';
+  document.getElementById('drop-filled').style.display = 'flex';
+}
+
+function submitClaim() {
+  if (!fileUploaded) {
+    handleFile();
+  }
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="font-size:16px;" aria-hidden="true"></i> Processing...';
+
+  const statusArea = document.getElementById('status-area');
+  statusArea.style.display = 'block';
+
+  const steps = document.querySelectorAll('.step-row');
+  let current = 0;
+
+  function advance() {
+    if (current > 0) {
+      const prev = steps[current - 1];
+      prev.style.color = '#0A2E36';
+      prev.querySelector('i').className = 'ti ti-circle-check';
+      prev.querySelector('i').style.color = '#00E5A3';
+    }
+    if (current < steps.length) {
+      const cur = steps[current];
+      cur.style.color = '#0A2E36';
+      cur.style.fontWeight = '700';
+      cur.querySelector('i').className = 'ti ti-loader-2';
+      cur.querySelector('i').style.color = '#3F7266';
+      current++;
+      setTimeout(advance, 750);
+    } else {
+      const pill = document.querySelector('.step-pill');
+      pill.textContent = 'complete';
+      pill.style.background = '#E1F5EE';
+      pill.style.color = '#085041';
+      btn.innerHTML = '<i class="ti ti-arrow-right" style="font-size:16px;" aria-hidden="true"></i> View reasoning timeline';
+      btn.disabled = false;
+      btn.onclick = () => sendPrompt('Show me the agent reasoning timeline for this claim');
+    }
+  }
+  setTimeout(advance, 400);
+}
+</script>
