@@ -1,0 +1,9 @@
+# Workflows, Agents, and Tools.
+
+
+**in 2026 someone teaching claude code says Workflow Tools and Agents (WAT) . Is this enterprise level standard? Or something made up for marketing?.**  
+
+---  
+
+
+No, WAT is not an industry-wide enterprise standard. It is an educational or marketing acronym made up by a third-party platform to explain how Claude Code works.The acronym stands for Workflows, Agents, and Tools. While the words themselves represent actual Anthropic features, the specific "WAT" phrasing was popularized in 2026 by AI education and software companies (most notably MindStudio) to give people an easy framework for structuring AI tasks.The Actual 2026 Claude FrameworkIf you are learning Claude Code, Anthropic's official architecture focuses on these three tiers, even if they do not officially use the "WAT" marketing name:Workflows: Rigid, step-by-step code paths. Using the native /workflows command or Claude's dynamic workflows, Claude Code writes its own orchestration scripts to execute repeatable processes or fan out massive tasks across hundreds of sub-agents.Agents: Autonomous AI decision-makers. These handle the reasoning loops and coordinate sub-agents to achieve a broader goal.Tools (and Skills): The capability layer. These are the deterministic functions and portable playbooks (like bash terminal access or Model Context Protocol (MCP) integrations) that Claude triggers to interact with the real world.SummaryThink of WAT as a helpful teaching tool rather than an official industry specification. Learning the concept is highly valuable because it correctly teaches you how to map out multi-agent automation systems in Claude Code, but you won't find it in Anthropic's official technical documentation.If you would like, I can give you a breakdown of how to build an actual workflow script or how to use the Model Context Protocol (MCP) to connect Claude Code to your local tools.
